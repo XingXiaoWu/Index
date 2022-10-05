@@ -34,7 +34,7 @@ const goToUrl = (url: string) => { window.open(url) }
 
   <n-grid :cols="4" x-gap="8" y-gap="8">
     <n-gi v-for="(item,i) in productList" :key="i">
-      <n-card :title="item.title" :class="i % 2 ? 'bg-light-200' : 'bg-light-800'" class="hover:bg-dark-50"
+      <n-card :title="item.title" :class="i % 2 ? 'bg-light-200' : 'bg-light-800'" class="hover:bg-light-blue-300 cursor-pointer"
         @click="()=>goToUrl(item.link)">
         {{item.text}}
       </n-card>
