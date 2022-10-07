@@ -22,7 +22,12 @@ const productList = [{
   title: '信息系统管理师学习笔记',
   link: 'https://blog.xingxiaowu.cn/SystemManagerExam/',
   text: '阿星也曾想考软考，但是失败了，因为懒。。。。'
-},]
+},{
+  icon: '',
+  title: '运动同步',
+  link: 'http://blog.xingxiaowu.cn/StepApp/',
+  text: '阿星也是个运动健将了哈哈'
+}]
 
 const goToUrl = (url: string) => { window.open(url) }
 </script>
