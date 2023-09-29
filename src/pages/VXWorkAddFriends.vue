@@ -36,10 +36,8 @@ const create = () => {
         })
     }
     const tmp = JSON.stringify(reuslt)
-    let resultString = `
-    const friends = ${tmp};
-    module.exports = friends;
-    `
+    let resultString = `const friends = ${tmp};
+    module.exports = friends;`
     data.result = resultString
 }
 
