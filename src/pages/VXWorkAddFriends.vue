@@ -38,7 +38,7 @@ const create = () => {
     const tmp = JSON.stringify(reuslt)
     let resultString = `
     const friends = ${tmp};
-    export default friends;
+    module.exports = friends;
     `
     data.result = resultString
 }
