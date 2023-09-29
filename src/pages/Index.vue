@@ -1,4 +1,8 @@
 <script setup lang="ts">
+// import { useRouter } from 'vue-router';
+// const router = useRouter();
+const host = window.location.origin
+
 const productList = [{
   icon: '',
   title: '我的博客',
@@ -29,12 +33,14 @@ const productList = [{
 }, {
   icon: '',
   title: '生成添加客户的数据',
-  link: 'http://blog.xingxiaowu.cn/VXWorkAddFriends/',
+  link: host + '/#/vxworkaddfriends',
   text: '阿星不想手动添加客户'
 },
 ]
 
-const goToUrl = (url: string) => { window.open(url) }
+const goToUrl = (url: string) => {
+  window.open(url)
+}
 </script>
 
 <template>
