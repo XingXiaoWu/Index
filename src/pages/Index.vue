@@ -36,6 +36,12 @@ const productList = [{
   link: host + '/#/vxworkaddfriends',
   text: '阿星不想手动添加客户'
 },
+{
+  icon: '',
+  title: '阿星的感谢信',
+  link: host + '/#/thanks',
+  text: '来自阿星的感谢'
+},
 ]
 
 const goToUrl = (url: string) => {

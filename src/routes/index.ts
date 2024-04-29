@@ -1,10 +1,12 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Index from '../pages/Index.vue'
 import VXWorkAddFriends from '../pages/VXWorkAddFriends.vue'
+import ThanksLiVue from '../pages/ThanksLi.vue'
 
 const routes = [
     { path: '/', component: Index, name: "index" },
     { path: '/vxworkaddfriends', component: VXWorkAddFriends, name: "VXWorkAddFriends" },
+    { path: '/thanks', component: ThanksLiVue, name: "thanks" },
 ]
 
 const router = createRouter({
