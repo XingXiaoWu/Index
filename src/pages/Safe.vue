@@ -14,7 +14,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-const host = window.location.origin
+// const host = window.location.origin
 
 const proxyList = [
   {
