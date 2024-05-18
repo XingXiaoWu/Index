@@ -6,9 +6,15 @@ const theme = computed(() => (osThemeRef.value === 'dark' ? darkTheme : null))
 </script>
 
 <template>
-  <n-config-provider :theme="theme" :date-locale="dateZhCN" class="flex flex-col">
+  <n-config-provider :theme="theme" :date-locale="dateZhCN" class="flex flex-col h-full">
     <n-message-provider>
-      <router-view> </router-view>
+      <n-layout has-sider>
+        <n-layout>
+          <n-layout-content content-style="padding: 24px;">
+            <router-view> </router-view>
+          </n-layout-content>
+        </n-layout>
+      </n-layout>
     </n-message-provider>
   </n-config-provider>
 </template>
@@ -20,6 +26,7 @@ const theme = computed(() => (osThemeRef.value === 'dark' ? darkTheme : null))
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  width: 100vw;
+  height: 100vh;
 }
 </style>
