@@ -2,11 +2,14 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import Index from '../pages/Index.vue'
 import KeyValGenerator from '../pages/KeyValGenerator.vue'
 import ThanksLiVue from '../pages/ThanksLi.vue'
+import Safe from '../pages/Safe.vue'
+
 
 const routes = [
     { path: '/', component: Index, name: "index" },
     { path: '/KeyValGenerator', component: KeyValGenerator, name: "KeyValGenerator" },
     { path: '/thanks', component: ThanksLiVue, name: "thanks" },
+    { path: '/safe', component: Safe, name: "safe" },
 ]
 
 const router = createRouter({
