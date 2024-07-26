@@ -49,6 +49,12 @@ const productList = [
     link: host + '/#/safe',
     text: '阿星也有一个黑客梦'
   },
+  {
+    icon: '',
+    title: '阿星的饭醉集团',
+    link: host + '/lunch.html',
+    text: '饭醉分子'
+  },
 ]
 
 const goToUrl = (url: string) => {
