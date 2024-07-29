@@ -6,10 +6,63 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>阿星的饭醉集团</title>
+
+    <style type="text/css">
+        @keyframes show {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes hide {
+            0% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .toast_box {
+            /* width: 100%; */
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            /* justify-content: center; */
+            z-index: 10;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+
+        .toast_box p {
+            box-sizing: border-box;
+            padding: 10px 20px;
+            width: max-content;
+            /* 提示框的背景色 */
+            background: #707070;
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
+            border-radius: 6px;
+            opacity: 0.8;
+        }
+
+        .toliet {
+            margin: 0 auto;
+        }
+    </style>
 </head>
 
 <body>
     <div>
+        <div class="toast_box">
+            <p id="toast"></p>
+        </div>
         <span>吃几个菜</span>
         <input type="text" id="dish">
         <p>吃左边还是右边</p>
@@ -24,7 +77,9 @@
         <br />
         <textarea name="jsonValue" id="jsonValue" cols="30" rows="10"></textarea>
         <br />
-        <span>合计:</span><input id="sum"></input><span>元<span>
+        <span>合计:</span><input id="sum"></input><span>元</span>
+        <br />
+        <button  onclick="copyTextToClipboard()"> 一键复制</button>
     </div>
 
 </body>
@@ -148,7 +203,7 @@
         // 得到菜单
         let dishMenu = menu[target]
 
-        
+
         let dishNum = document.getElementById("dish").value
         dishNum = parseInt(dishNum, 10)
 
@@ -166,6 +221,18 @@
     }
 
 
+
+    const copyTextToClipboard = async () => {
+        const menu = document.getElementById("jsonValue").value
+        const sum = document.getElementById("sum").value
+        const text = "老板你好，我们大约11点50左右到。\n下面是中午点的菜：\n" + menu + "\n共计" + sum + "元，你看对不对"
+        try {
+            await navigator.clipboard.writeText(text);
+            toast('复制成功');
+        } catch (err) {
+            toast('复制失败: ', err);
+        }
+    }
     // 生成x个不超过y的随机数组
     const generateRandomNumbers = (x, y) => {
         let result = [];
@@ -178,6 +245,20 @@
 
         result = Array.from(numbers);
         return result;
+    }
+
+    const toast = (text, time) => {
+        let toast = document.getElementById('toast');
+        let toast_box = document.getElementsByClassName('toast_box')[0];
+        toast.innerHTML = text;
+        toast_box.style.animation = 'show 1.5s'
+        toast_box.style.display = 'inline-block';
+        setTimeout(() => {
+            toast_box.style.animation = 'hide 1.5s'
+            setTimeout(() => {
+                toast_box.style.display = 'none';
+            }, 3000)
+        }, time)
     }
 
 </script>
