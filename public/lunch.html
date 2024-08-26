@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>阿星的饭醉集团</title>
+
+    <style type="text/css">
+        @keyframes show {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes hide {
+            0% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .toast_box {
+            /* width: 100%; */
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            /* justify-content: center; */
+            z-index: 10;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+
+        .toast_box p {
+            box-sizing: border-box;
+            padding: 10px 20px;
+            width: max-content;
+            /* 提示框的背景色 */
+            background: #707070;
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
+            border-radius: 6px;
+            opacity: 0.8;
+        }
+
+        .toliet {
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <div class="toast_box">
+            <p id="toast"></p>
+        </div>
+        <span>吃几个菜</span>
+        <input type="text" id="dish">
+        <p>吃左边还是右边</p>
+        <input type="radio" name="target" value="left" id="left">
+        <label for="left">左</label>
+
+        <input type="radio" name="target" value="right" id="right">
+        <label for="right">右</label>
+
+        <br />
+        <button onclick="createMenu()">开始随机选菜！</button>
+        <br />
+        <textarea name="jsonValue" id="jsonValue" cols="30" rows="10"></textarea>
+        <br />
+        <span>合计:</span><input id="sum"></input><span>元</span>
+        <br />
+        <button  onclick="copyTextToClipboard()"> 一键复制</button>
+    </div>
+
+</body>
+
+<script>
+    const leftMenu = [
+        { "label": "青椒肉片", "price": 10 },
+        { "label": "青椒炒蛋", "price": 10 },
+        { "label": "西红柿炒蛋", "price": 10 },
+        { "label": "韭菜炒蛋", "price": 10 },
+        { "label": "洋葱炒蛋", "price": 10 },
+        { "label": "洋葱炒肉", "price": 10 },
+        { "label": "肉沫豆腐", "price": 10 },
+        { "label": "肉沫土豆丝", "price": 10 },
+        { "label": "手撕包菜", "price": 10 },
+        { "label": "白菜杆炒肉", "price": 10 },
+        { "label": "香干肉丝", "price": 12 },
+        { "label": "木耳肉丝", "price": 12 },
+        { "label": "黄瓜炒火腿", "price": 12 },
+        { "label": "玉米火腿", "price": 12 },
+        { "label": "豆角肉丝", "price": 12 },
+        { "label": "猪血豆腐", "price": 12 },
+        { "label": "洋葱炒猪干", "price": 12 },
+        { "label": "鱼香肉丝", "price": 12 },
+        { "label": "豆泡炒肉", "price": 12 },
+        { "label": "千张肉丝", "price": 12 },
+        { "label": "虎皮青椒", "price": 12 },
+        { "label": "芹莱肉丝", "price": 12 },
+        { "label": "外婆菜炒肉", "price": 12 },
+        { "label": "蒜苗炒肉", "price": 12 },
+        { "label": "苦瓜炒肉", "price": 12 },
+        { "label": "青椒炒猪干", "price": 12 },
+        { "label": "九江鱼块", "price": 15 },
+        { "label": "香辣鸡丝", "price": 15 },
+        { "label": "农家一碗香", "price": 15 },
+        { "label": "腐竹炒肉", "price": 15 },
+        { "label": "酱爆肉", "price": 15 },
+        { "label": "小炒鸡杂", "price": 15 },
+        { "label": "青椒鸡蛋火腿", "price": 15 },
+        { "label": "回锅肉", "price": 15 },
+        { "label": "青豆炒肉", "price": 15 },
+        { "label": "腊肉炒大蒜", "price": 18 },
+        { "label": "炒肥肠", "price": 18 },
+        { "label": "炒牛肉丝", "price": 18 },
+        { "label": "炒牛肚", "price": 18 },
+        { "label": "土豆牛肉", "price": 20 },
+        { "label": "梅菜烧肉", "price": 20 },
+    ]
+
+
+    const rightMenu = [
+        { "label": "青椒肉丝", "price": 10, },
+        { "label": "青椒炒蛋", "price": 10, },
+        { "label": "韭菜炒蛋", "price": 10, },
+        { "label": "西红柿炒蛋", "price": 10, },
+        { "label": "洋葱炒蛋", "price": 10, },
+        { "label": "肉沫豆腐", "price": 10, },
+        { "label": "肉沫咸菜", "price": 10, },
+        { "label": "肉沫土豆丝", "price": 10, },
+        { "label": "莴笋炒肉", "price": 10, },
+        { "label": "白菜杆炒肉", "price": 10, },
+        { "label": "豆芽炒肉", "price": 10, },
+        { "label": "洋葱炒肉", "price": 10, },
+        { "label": "酸豆角炒肉", "price": 10, },
+        { "label": "冬瓜炒肉", "price": 10, },
+        { "label": "辣椒爆豆豉", "price": 10, },
+        { "label": "碎皮黄瓜", "price": 10, },
+        { "label": "酸辣包菜", "price": 10, },
+        { "label": "酸辣土豆丝", "price": 10, },
+        { "label": "青椒炒猪肝", "price": 12, },
+        { "label": "洋葱炒猪肝", "price": 12, },
+        { "label": "大蒜炒猪肝", "price": 12, },
+        { "label": "鱼香肉丝", "price": 12, },
+        { "label": "芹菜肉丝", "price": 12, },
+        { "label": "木耳肉丝", "price": 12, },
+        { "label": "豆角炒肉", "price": 12, },
+        { "label": "腐竹炒肉", "price": 12, },
+        { "label": "豆泡炒肉", "price": 12, },
+        { "label": "青椒炒千张", "price": 12, },
+        { "label": "玉米火腿", "price": 12, },
+        { "label": "香干炒肉", "price": 12, },
+        { "label": "肉沫茄子", "price": 12, },
+        { "label": "外婆菜炒肉", "price": 12, },
+        { "label": "香萝卜炒鸭肠", "price": 12, },
+        { "label": "黄瓜炒火腿", "price": 12, },
+        { "label": "土豆片炒肉", "price": 12, },
+        { "label": "竹笋炒肉", "price": 12, },
+        { "label": "蒜苗炒肉", "price": 12, },
+        { "label": "苦瓜炒蛋", "price": 12, },
+        { "label": "千叶豆腐", "price": 12, },
+        { "label": "九江鱼块", "price": 15, },
+        { "label": "红烧鸡块", "price": 15, },
+        { "label": "腐竹烧肉", "price": 15, },
+        { "label": "回锅肉", "price": 15, },
+        { "label": "酱爆肉", "price": 15, },
+        { "label": "香辣鸡丝", "price": 15, },
+        { "label": "鸡胗", "price": 15, },
+        { "label": "鸡杂", "price": 15, },
+        { "label": "腊肉炒大蒜", "price": 18, },
+        { "label": "藜蒿炒香肠", "price": 20, },
+        { "label": "炒肥肠", "price": 20, },
+        { "label": "炒牛肚", "price": 20, },
+        { "label": "炒牛肉", "price": 20, },
+    ]
+    const createMenu = () => {
+        let menu = {
+            "right": rightMenu,
+            "left": leftMenu
+        }
+        // 吃左边还是右边
+        let radio = document.getElementsByName("target")
+        // 
+        let target = "left"
+        for (let index = 0; index < radio.length; index++) {
+            const element = radio[index];
+            if (element.checked) {
+                target = element.value
+            }
+        }
+        console.log(target);
+        // 得到菜单
+        let dishMenu = menu[target]
+
+
+        let dishNum = document.getElementById("dish").value
+        dishNum = parseInt(dishNum, 10)
+
+        const dishs = generateRandomNumbers(dishNum, dishMenu.length)
+
+        let result = ""
+        let sum = 0
+        dishs.forEach(item => {
+            result = result + " " + dishMenu[item].label
+            sum = sum + dishMenu[item].price
+        })
+
+        document.getElementById("jsonValue").value = result
+        document.getElementById("sum").value = sum.toString()
+    }
+
+
+
+    const copyTextToClipboard = async () => {
+        const menu = document.getElementById("jsonValue").value
+        const sum = document.getElementById("sum").value
+        const text = "老板你好，我们大约11点50左右到。\n下面是中午点的菜：\n" + menu + "\n共计" + sum + "元，你看对不对"
+        try {
+            await navigator.clipboard.writeText(text);
+            toast('复制成功');
+        } catch (err) {
+            toast('复制失败: ', err);
+        }
+    }
+    // 生成x个不超过y的随机数组
+    const generateRandomNumbers = (x, y) => {
+        let result = [];
+        let numbers = new Set();
+
+        while (numbers.size < x) {
+            var randomNum = Math.floor(Math.random() * y);
+            numbers.add(randomNum);
+        }
+
+        result = Array.from(numbers);
+        return result;
+    }
+
+    const toast = (text, time) => {
+        let toast = document.getElementById('toast');
+        let toast_box = document.getElementsByClassName('toast_box')[0];
+        toast.innerHTML = text;
+        toast_box.style.animation = 'show 1.5s'
+        toast_box.style.display = 'inline-block';
+        setTimeout(() => {
+            toast_box.style.animation = 'hide 1.5s'
+            setTimeout(() => {
+                toast_box.style.display = 'none';
+            }, 3000)
+        }, time)
+    }
+
+</script>
+
+</html>
