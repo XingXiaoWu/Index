@@ -14,6 +14,9 @@ dependencies:
   naive-ui:
     specifier: ^2.38.2
     version: 2.39.0(vue@3.4.34)
+  qrcode-generator:
+    specifier: ^1.4.4
+    version: 1.4.4
   unplugin-auto-import:
     specifier: ^0.16.7
     version: 0.16.7
@@ -1413,6 +1416,10 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /qrcode-generator@1.4.4:
+    resolution: {integrity: sha512-HM7yY8O2ilqhmULxGMpcHSF1EhJJ9yBj8gvDEuZ6M+KGJ0YY2hKpnXvRD+hZPLrDVck3ExIGhmPtSdcjC+guuw==}
+    dev: false
 
   /queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}

@@ -55,6 +55,12 @@ const productList = [
     link: host + '/lunch.html',
     text: '饭醉分子'
   },
+  {
+    icon: '',
+    title: '阿星的反向开票工具',
+    link: host + '/#/fxkp',
+    text: '反向开票好烦'
+  },
 ]
 
 const goToUrl = (url: string) => {

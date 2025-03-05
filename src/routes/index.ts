@@ -3,6 +3,7 @@ import Index from '../pages/Index.vue'
 import KeyValGenerator from '../pages/KeyValGenerator.vue'
 import ThanksLiVue from '../pages/ThanksLi.vue'
 import Safe from '../pages/Safe.vue'
+import Fxkp from '../pages/Fxkp.vue'
 
 
 const routes = [
@@ -10,6 +11,7 @@ const routes = [
     { path: '/KeyValGenerator', component: KeyValGenerator, name: "KeyValGenerator" },
     { path: '/thanks', component: ThanksLiVue, name: "thanks" },
     { path: '/safe', component: Safe, name: "safe" },
+    { path: '/fxkp', component: Fxkp, name: "fxkp" },
 ]
 
 const router = createRouter({
