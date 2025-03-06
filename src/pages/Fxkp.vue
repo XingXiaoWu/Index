@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div>
     <h1>输入公司名称生成文字 logo</h1>
     <input v-model="companyName" type="text" placeholder="请输入公司名称">
     <button @click="generateLogo">生成 logo</button>
@@ -17,22 +17,19 @@
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue';
+<script lang="ts" setup>
+import { ref, Ref } from 'vue';
 // 假设 qrcode.min.js 已经安装并导入
 import QRCode from 'qrcode-generator';
 
-const companyName = ref('');
-const logoText = ref('');
-const logoBgColor = ref('');
-const companyName2 = ref('');
-const address = ref('');
-const qrcodeHtml = ref('');
-const logoRef = ref('');
-
-// onMounted(() => {
-//   logoRef.value = document.getElementById('logo');
-// });
+// 定义响应式变量的类型
+const companyName: Ref<string> = ref('');
+const logoText: Ref<string> = ref('');
+const logoBgColor: Ref<string> = ref('');
+const companyName2: Ref<string> = ref('');
+const address: Ref<string> = ref('');
+const qrcodeHtml: Ref<string> = ref('');
+const logoRef: Ref<HTMLElement | null> = ref(null);
 
 const generateLogo = () => {
   if (companyName.value.length === 4) {
@@ -48,59 +45,61 @@ const downloadLogo = async () => {
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
   const text = logoText.value;
-  const color = logoRef.value.style.backgroundColor;
+  const color = logoRef.value?.style.backgroundColor || '';
 
   canvas.width = 2048;
   canvas.height = 2048;
 
   // 设置字体样式，与页面上的 logo 字体大小一致
-  ctx.font = '748px Arial';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
+  if (ctx) {
+    ctx.font = '748px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
 
-  // 清空画布
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // 清空画布
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // 绘制带圆角的背景
-  const radius = 200;
-  const x = 0;
-  const y = 0;
-  const width = 2048;
-  const height = 2048;
+    // 绘制带圆角的背景
+    const radius = 200;
+    const x = 0;
+    const y = 0;
+    const width = 2048;
+    const height = 2048;
 
-  ctx.beginPath();
-  ctx.moveTo(x + radius, y);
-  ctx.lineTo(x + width - radius, y);
-  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-  ctx.lineTo(x + width, y + height - radius);
-  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-  ctx.lineTo(x + radius, y + height);
-  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-  ctx.lineTo(x, y + radius);
-  ctx.quadraticCurveTo(x, y, x + radius, y);
-  ctx.closePath();
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.lineTo(x + width - radius, y);
+    ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+    ctx.lineTo(x + width, y + height - radius);
+    ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+    ctx.lineTo(x + radius, y + height);
+    ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+    ctx.lineTo(x, y + radius);
+    ctx.quadraticCurveTo(x, y, x + radius, y);
+    ctx.closePath();
 
-  ctx.fillStyle = color;
-  ctx.fill();
+    ctx.fillStyle = color;
+    ctx.fill();
 
-  // 设置文字颜色
-  ctx.fillStyle = 'white';
+    // 设置文字颜色
+    ctx.fillStyle = 'white';
 
-  // 计算文字位置
-  const centerX = canvas.width / 2;
-  const centerY = canvas.height / 2;
+    // 计算文字位置
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
 
-  // 绘制文字
-  if (text.includes('\n')) {
-    const lines = text.split('\n');
-    const lineHeight = 748;
-    const totalHeight = lines.length * lineHeight;
-    const startY = centerY - totalHeight / 2 + lineHeight / 2;
-    lines.forEach((line, index) => {
-      ctx.fillText(line, centerX, startY + index * lineHeight);
-    });
-  } else {
-    ctx.fillText(text, centerX, centerY);
+    // 绘制文字
+    if (text.includes('\n')) {
+      const lines = text.split('\n');
+      const lineHeight = 748;
+      const totalHeight = lines.length * lineHeight;
+      const startY = centerY - totalHeight / 2 + lineHeight / 2;
+      lines.forEach((line, index) => {
+        ctx.fillText(line, centerX, startY + index * lineHeight);
+      });
+    } else {
+      ctx.fillText(text, centerX, centerY);
+    }
   }
 
   // 创建下载链接
