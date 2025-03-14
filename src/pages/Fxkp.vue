@@ -112,8 +112,10 @@ const downloadLogo = async () => {
 const generateQRCode = () => {
   qrcodeHtml.value = '';
   if (address.value) {
+    QRCode.stringToBytes = QRCode.stringToBytesFuncs['UTF-8'];
     const qr = QRCode(0, 'L');
     qr.addData(address.value);
+    // qr.addData(unescape(encodeURIComponent(address)));
     qr.make();
     qrcodeHtml.value = qr.createImgTag(4);
   }
