@@ -32,14 +32,10 @@ import { ArchiveOutline as ArchiveIcon, Download as DownloadIcon } from '@vicons
 import { onMounted, ref } from 'vue'
 import { NButton, NUpload, NIcon, useMessage, type UploadOnChange } from 'naive-ui'
 import * as pdfjsLib from 'pdfjs-dist'
-// @ts-ignore
-// import pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
-
 import JSZip from 'jszip'
 
 onMounted(() => {
-  // pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
-  pdfjsLib.GlobalWorkerOptions.workerSrc = 'node_modules/pdfjs-dist/build/pdf.worker.js';
+  pdfjsLib.GlobalWorkerOptions.workerSrc = '../../node_modules/pdfjs-dist/build/pdf.worker.min.mjs';
 })
 
 const message = useMessage()
