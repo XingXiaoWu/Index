@@ -61,6 +61,12 @@ const productList = [
     link: host + '/#/fxkp',
     text: '反向开票好烦'
   },
+  {
+    icon: '',
+    title: '阿星的pdf转png工具',
+    link: host + '/#/pdf2png',
+    text: '偶尔要转png，可以理解的'
+  },
 ]
 
 const goToUrl = (url: string) => {

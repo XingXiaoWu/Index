@@ -1,30 +1,41 @@
 {
-  "name": "index",
-  "private": true,
+  "name": "index2",
   "version": "0.0.0",
+  "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc && vite build",
-    "preview": "vite preview"
+    "build": "run-p type-check \"build-only {@}\" --",
+    "preview": "vite preview",
+    "build-only": "vite build",
+    "type-check": "vue-tsc --build"
   },
   "dependencies": {
-    "@unocss/reset": "^0.56.5",
+    "@unocss/reset": "66.1.0-beta.11",
     "clipboard": "^2.0.11",
-    "naive-ui": "^2.38.2",
+    "jszip": "^3.10.1",
+    "pdfjs-dist": "^5.1.91",
+    "pinia": "^3.0.1",
     "qrcode-generator": "^1.4.4",
-    "unplugin-auto-import": "^0.16.7",
-    "unplugin-vue-components": "^0.25.2",
-    "vfonts": "^0.0.3",
-    "vue": "^3.4.27",
-    "vue-router": "^4.3.2"
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^4.6.2",
-    "less": "^4.2.0",
-    "typescript": "5.4.5",
-    "unocss": "^0.56.5",
-    "vite": "^4.5.3",
-    "vue-tsc": "^1.8.27"
+    "@tsconfig/node22": "^22.0.1",
+    "@types/node": "^22.14.0",
+    "@vicons/antd": "^0.13.0",
+    "@vicons/ionicons5": "^0.13.0",
+    "@vitejs/plugin-vue": "^5.2.3",
+    "@vue/tsconfig": "^0.7.0",
+    "naive-ui": "^2.41.0",
+    "npm-run-all2": "^7.0.2",
+    "typescript": "~5.8.0",
+    "unocss": "66.1.0-beta.11",
+    "unplugin-auto-import": "^19.1.2",
+    "unplugin-vue-components": "^28.4.1",
+    "vfonts": "^0.0.3",
+    "vite": "^6.2.4",
+    "vite-plugin-vue-devtools": "^7.7.2",
+    "vue-tsc": "^2.2.8"
   }
 }

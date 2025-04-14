@@ -30,4 +30,4 @@ const goToUrl = (url: string) => {
 }
 </script>
 
-<style scoped lang='less'></style>
+<style scoped></style>

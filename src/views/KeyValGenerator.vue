@@ -101,7 +101,7 @@ defineExpose({
 
 </script>
 
-<style scoped lang='less'>
+<style scoped>
 div {
     background-color: black;
 }

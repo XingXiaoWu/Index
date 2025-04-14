@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, Ref } from 'vue';
+import { ref, type Ref } from 'vue';
 // 假设 qrcode.min.js 已经安装并导入
 import QRCode from 'qrcode-generator';
 
