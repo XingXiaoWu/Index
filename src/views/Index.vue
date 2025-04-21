@@ -67,6 +67,12 @@ const productList = [
     link: host + '/#/pdf2png',
     text: '偶尔要转png，可以理解的'
   },
+  {
+    icon: '',
+    title: '阿星的gpt工具',
+    link: 'https://chat.xingxiaowu.cn',
+    text: '偶尔要转png，可以理解的'
+  },
 ]
 
 const goToUrl = (url: string) => {
