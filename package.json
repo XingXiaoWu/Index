@@ -13,6 +13,7 @@
   "dependencies": {
     "@unocss/reset": "66.1.0-beta.11",
     "clipboard": "^2.0.11",
+    "jsencrypt": "^3.3.2",
     "jszip": "^3.10.1",
     "pdfjs-dist": "^5.1.91",
     "pinia": "^3.0.1",
