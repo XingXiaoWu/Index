@@ -6,6 +6,7 @@ import Safe from '../views/Safe.vue'
 import Fxkp from '../views/Fxkp.vue'
 import NetWorkTop from '../views/NetWorkTop.vue'
 import Pdf2Png from '../views/Pdf2Png.vue'
+import Ciphertext from '../views/Ciphertext.vue'
 
 const routes: RouteRecordRaw[] = [
   { path: '/', component: Index, name: "index" },
@@ -15,6 +16,7 @@ const routes: RouteRecordRaw[] = [
   { path: '/network', component: NetWorkTop, name: "network" },
   { path: '/fxkp', component: Fxkp, name: "fxkp" },
   { path: '/pdf2png', component: Pdf2Png, name: "pdf2png" },
+  { path: '/ciphertext', component: Ciphertext, name: "ciphertext" },
 ]
 
 const router = createRouter({

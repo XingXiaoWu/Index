@@ -67,6 +67,12 @@ const productList = [
     link: host + '/#/pdf2png',
     text: '偶尔要转png，可以理解的'
   },
+  {
+    icon: '',
+    title: '阿星的简单加密',
+    link: host + '/#/ciphertext',
+    text: '阿星的简单加密'
+  },
 ]
 
 const goToUrl = (url: string) => {
