@@ -14,11 +14,23 @@
 
             <div class="text-area-group">
                 <label for="cipher-text">密文：</label>
-                                <textarea 
-                    id="cipher-text"
-                    v-model="cipherText" 
-                    placeholder="请输入要解密的密文或加密后的密文将显示在这里..."
-                    class="text-area"></textarea>
+                <div class="textarea-with-buttons">
+                    <textarea
+                        id="cipher-text"
+                        v-model="cipherText"
+                        placeholder="请输入要解密的密文或加密后的密文将显示在这里..."
+                        class="text-area"></textarea>
+                    <div class="action-buttons">
+                        <button @click="copyCipherText"
+                            class="action-btn copy-btn" title="复制密文">
+                            <span>📋</span>
+                        </button>
+                        <button @click="pasteCipherText"
+                            class="action-btn paste-btn" title="粘贴密文">
+                            <span>📄</span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -158,6 +170,34 @@ const clear = () => {
     originalText.value = ''
     cipherText.value = ''
 }
+
+// 复制密文函数
+const copyCipherText = async () => {
+    if (!cipherText.value.trim()) {
+        alert('没有可复制的内容')
+        return
+    }
+
+    try {
+        await navigator.clipboard.writeText(cipherText.value)
+        alert('密文已复制到剪贴板')
+    } catch (error) {
+        console.error('复制失败:', error)
+        alert('复制失败，请手动复制')
+    }
+}
+
+// 粘贴密文函数
+const pasteCipherText = async () => {
+    try {
+        const text = await navigator.clipboard.readText()
+        cipherText.value = text
+        alert('已粘贴密文')
+    } catch (error) {
+        console.error('粘贴失败:', error)
+        alert('粘贴失败，请手动粘贴')
+    }
+}
 </script>
 
 <style scoped>
@@ -212,6 +252,46 @@ label {
 .text-area[readonly] {
     background-color: #f9f9f9;
     color: #666;
+}
+
+.textarea-with-buttons {
+    position: relative;
+}
+
+.action-buttons {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    gap: 5px;
+}
+
+.action-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.9);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.action-btn:hover {
+    background-color: #f0f0f0;
+    transform: scale(1.05);
+}
+
+.copy-btn:hover {
+    background-color: #e8f5e8;
+}
+
+.paste-btn:hover {
+    background-color: #e8f0ff;
 }
 
 .button-section {
