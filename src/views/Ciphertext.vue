@@ -15,7 +15,7 @@
             <div class="text-area-group">
                 <div class="label-with-buttons">
                     <label for="cipher-text">密文：</label>
-                    <div class="action-buttons">
+                    <!-- <div class="action-buttons">
                         <button @click="copyCipherText"
                             class="action-btn copy-btn" title="复制密文">
                             <span>📋</span>
@@ -24,7 +24,7 @@
                             class="action-btn paste-btn" title="粘贴密文">
                             <span>📄</span>
                         </button>
-                    </div>
+                    </div> -->
                 </div>
                 <textarea
                     id="cipher-text"
@@ -38,8 +38,8 @@
             <button @click="encrypt"
                 class="btn btn-encrypt">加密</button>
             <button @click="decrypt"
-                class="btn btn-decrypt">解密</button>
-            <button @click="swap" class="btn btn-swap">交换</button>
+                class="btn btn-decrypt">粘贴并解密</button>
+            <button @click="copyCipherText" class="btn btn-swap">复制密文</button>
             <button @click="clear" class="btn btn-clear">清空</button>
         </div>
         
@@ -51,43 +51,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import JSEncrypt from 'jsencrypt'
+// @ts-ignore
+import ClipboardJS from 'clipboard'
 
 // RSA2 密钥配置 - 请填入您的密钥
-const RSA_PUBLIC_KEY = `MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsSXjpphcj/34n1nHCnma
-rGCzFsv/vRE1XpQTwJpuXxCjjSUUAvf202I+sDH93/Tm6M0k0LQ1WQkeEApRzkb6
-gPG1LybpKjvaYGMGEBZ5wHvM4FclJMIGqYAB/XP40XfvpYvn/C+QAY0JZxkvYlDb
-cBhy5ggYS1Y0+3tS8WriplyjhjFBkq+plgPncOyAXNZ6tntjmpkuQw4sJ+Pt9Ag8
-dypB8qmjM8464m2+3b81K64VhH4GtPJt0V6+rpUUlbGdbhyQJM6KdRwDY8WARxMH
-zAESwCTEDoVBtZcSGK/UwsGAtTGqHxfFCtFc+/6GRIr0o29goPeIELRn6TTmu+VY
-ywIDAQAB`
-const RSA_PRIVATE_KEY = `MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCxJeOmmFyP/fif
-WccKeZqsYLMWy/+9ETVelBPAmm5fEKONJRQC9/bTYj6wMf3f9ObozSTQtDVZCR4Q
-ClHORvqA8bUvJukqO9pgYwYQFnnAe8zgVyUkwgapgAH9c/jRd++li+f8L5ABjQln
-GS9iUNtwGHLmCBhLVjT7e1LxauKmXKOGMUGSr6mWA+dw7IBc1nq2e2OamS5DDiwn
-4+30CDx3KkHyqaMzzjribb7dvzUrrhWEfga08m3RXr6ulRSVsZ1uHJAkzop1HANj
-xYBHEwfMARLAJMQOhUG1lxIYr9TCwYC1MaofF8UK0Vz7/oZEivSjb2Cg94gQtGfp
-NOa75VjLAgMBAAECggEAF6bFZELHaPoxraTg7EccHZOzlYGbHXUkuQHwOTDlN5AT
-Jg8jQto0fDiLwh6KlNIv2jk5hxvoW4DaIK4gCfh0Da83z5nUW60uFNxjvNYjX02o
-JvO7o9K77PmISnynZeArgODTElqPUYWxEbDNIMVG5wp8nLXL+JMD8+edRVpN9IQE
-4BdnPgN0+zxCFgBWyUWGzFjc1oovtJDnpYT+1nfW4M9HV7/vEY8SVC/rvzuYlae/
-NbyreHpiAHsf849IbBwZS7WW469OtAiWMy+hBhX6mCwx5ZMnjjaVcQu1pm8ao2Ml
-lZwhnd/A4RdQbtuN1nkAKrTKjoFmVVgFMgzm4ZB/YQKBgQDie3rwf2zmk4o/Zirr
-eqTjQws6cmd/i79fu9BoY/7vRuaOGBYhPc0hQTq9zlveRrhuLH+mO2rJ5yYGhTit
-bCsHrhdaTZdv6eGgqxH69f6+AaT02XVgt61NTAx54FveTwGzI5ocXRimYEnBph+S
-5CGURwwhihgmPgKDd4raozrNUwKBgQDIPGH1ZoGTtboKv36PRxAtizRxB7BM26+T
-LssDF2soEkzxf26epdXre80h+EtLn35RV8Nb73+6EQrF5HQaDuLwGgxF5RPO53ek
-rHoNuMu166GhNsKqKPbcQbfOSHSzB4EMGS2MaWyi8TWVa6N61h4qtjzS+bvW42ts
-5bH6WlZfqQKBgBSX07Lgcz939N8U5BwrN6juZKv40Q5Y35rN0gJb7UdGdBpBeGmn
-W+qFKtktVU8dsRFbfHPZ/TjEisGXBXNHXZZCLx9n5LgpVPmt9GGUUohmT+BvkWus
-59Yabxv52YCaQHZQa2fe0yn1oV85Qq+xjJgV6bV3AAEiLEpV6Us+Ak+/AoGACN3T
-oKA3YKkNYeh03DdTWhDt84tZnS2lKqlJyAtDbXTR/2ebKF9Dh7flr3llLCYV29g9
-CFckmsKibXzeP0Elf2hH3thz9hd9zsbsaKskKhwS/iaEnDBQLhSi5PmEYWEVr8l1
-oOASNWzk6IbpqEjO8Sk8rELutGdBnILXTLSvWnECgYBTqlQMIBkgZyEeCYGIkhUx
-bU3qBTG9+PfbOfdgGtJMwAog4IuoN8Y7CvZjn3ex82nCsD7A3bFBZQrIKrrFWmj8
-QnE9jceqRpv+HVeFGlGO5pwWuz2PGtPK4f9ILK6JVp8Wq7KUwguV3VIKEeVr4x58
-s2cqbfwxKATFJEL/jOaslg==`
+const RSA_PUBLIC_KEY = `MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAw+TMvFLGzjy8oz49If5Ek6qXf3EpnB/D6YutkhKpj9RDCCDrnZw8IBxnoRkIGpytWwbAWKJsep3bxMnQSh8/PE6W5KPNGPOFWWhxxC1RU1aXXFu3J473NZz1DLjhtC2fguvPxcGBpXVFbGumIcSBYu0+4e3LJ3tnGVZxBsU2eszEHvUDyLvUy8HVy2AA5L/+k7qVPIDsUBdeRs0h2cV+Y3eUw7Kf1bxIr1nyvFrsTQhvB3JOk5I1OATA12aozFfILtfyeWl3bDKfHD8nc2BSz+LvN55GIqV0sySrE6aNws/pjHIkhsEGZBUCsiQqw++gY1G7w4fsxHEgXgSRM8ik7QIDAQAB`
+const RSA_PRIVATE_KEY = `MIIEowIBAAKCAQEAw+TMvFLGzjy8oz49If5Ek6qXf3EpnB/D6YutkhKpj9RDCCDrnZw8IBxnoRkIGpytWwbAWKJsep3bxMnQSh8/PE6W5KPNGPOFWWhxxC1RU1aXXFu3J473NZz1DLjhtC2fguvPxcGBpXVFbGumIcSBYu0+4e3LJ3tnGVZxBsU2eszEHvUDyLvUy8HVy2AA5L/+k7qVPIDsUBdeRs0h2cV+Y3eUw7Kf1bxIr1nyvFrsTQhvB3JOk5I1OATA12aozFfILtfyeWl3bDKfHD8nc2BSz+LvN55GIqV0sySrE6aNws/pjHIkhsEGZBUCsiQqw++gY1G7w4fsxHEgXgSRM8ik7QIDAQABAoIBAA6z8lLzN+U8WqCPrWkgVheAPxaLZjxdMlLp5IPuydJtXn+dGu94OGy6PQ6dcUXaux82fULZzrW6+fGwqmUZ0yD3ZBdynOmnGNE6XTREfigOEIEX3YIcVqfWk++Zw8+xJJm1ZyGYZx7wU57c4I9ZxKf/FxBq4kE1ylSfmo76comaXxhMIe/pia8PplKoDIjqDI8D6JouUGcjBOvS6FddOqLT3wAVE6xiks1R6wxvf75r74JeDD8qyt2oUjDBTB/Twwn9SJWvyib6TTIL82xZN3ihMMXLqaUqvo2qQpr5lniUr5zEUI9WmUEy/6oxxA7nusVEKopUNVuuDLzndXwfp7ECgYEA4bJc2koDmIjAgyzqNPEdc42+DcjbDwyJ1SB/FTfgBj1mR1pRH3G4mqHyBje0ZAUy7SSinUUrCWPQMo2zI5hvq0+3ChmRb4UUvlRrDF3WS0MSzUErESw6f4CLqthpRdvKEM4CmP5X2W1jz17q+LNyLikBUy9dm+AEqh2JRb2PKV0CgYEA3jIM5/2w4RI6GIJLLhh12gkqy1+HUZ12gNXIzuPHxzoBICul+mR2FIYaEZBRo6fQwfMJkXhdowMiiOoruxizyQHKV3oRS9qesN51xffNQPDdDac72SKv3Holahx/Uro8M2yfPmMVLRh5D4+ScBZs54fidVRtyAFMxF9OtASpYNECgYEA1ZP2LlQQJw5yLzAXylXJqwodKepC8nDJFjiUSj3/76e23Brp3bm+Ggbag2u/d088LBGZGP7VhSNBaDWTqkGcmx7qddJQQJpNUPeN/bvnCH3GkxnyaWPTT8kTYm883/DnvRNWffViqMzNwPVvoj4d9PS03kVabiGGCH2+45JIobkCgYBnRIXBEKQzhuAfYfcE/nNPmbEdAlIG+ZMI/9MrbKv+CRRa2k5y2FwU39qfzR5UXHtmmMkapgGG8L8NOSCH/UwZoM5k56PASGQ2ub2s+6WWiBuE6/Oh0EBBzTc0YPg//7RZBiPgv/YollY1iDm8BIAq/3mdpFa9fPUr00vl2MDL8QKBgA2QKWR8QYh92L9d81vHQDs4J+9vOx60OFCTwrh6qhZ48wxN+Tyq9op/ZPBpWHo28V8tfhINQJWnqlnGaZ77NP4I/8Oroc2nI+NqZ2iz4MweuMIWeRnTQbzr+DnZlnAoxBcHKWbcWECotaM3fRqvBNKiEyd3FTwefvWDjd0e87Yg`
 
 // RSA加密函数
 const encryptRSA = (text: string, publicKey: string): string => {
@@ -119,6 +90,22 @@ const cipherText = ref('')
 const showToast = ref(false)
 const toastMessage = ref('')
 const toastType = ref('success') // 'success' | 'error' | 'info'
+
+let clipboard: ClipboardJS | null = null
+
+onMounted(() => {
+  clipboard = new ClipboardJS('.copy-btn')
+  clipboard.on('success', () => {
+    showToastMessage('密文已复制到剪贴板')
+  })
+  clipboard.on('error', () => {
+    showToastMessage('复制失败，请手动复制', 'error')
+  })
+})
+
+onBeforeUnmount(() => {
+  clipboard?.destroy()
+})
 
 // 显示toast函数
 const showToastMessage = (message: string, type: 'success' | 'error' | 'info' = 'success') => {
@@ -157,7 +144,8 @@ const encrypt = () => {
 }
 
 // 解密函数
-const decrypt = () => {
+const decrypt = async () => {
+    await pasteCipherText()
     if (!cipherText.value.trim()) {
         showToastMessage('请输入要解密的密文', 'error')
         return
@@ -180,12 +168,12 @@ const decrypt = () => {
     }
 }
 
-// 交换函数
-const swap = () => {
-    const temp = originalText.value
-    originalText.value = cipherText.value
-    cipherText.value = temp
-}
+// // 交换函数
+// const swap = () => {
+//     const temp = originalText.value
+//     originalText.value = cipherText.value
+//     cipherText.value = temp
+// }
 
 // 清空函数
 const clear = () => {
@@ -211,13 +199,21 @@ const copyCipherText = async () => {
 
 // 粘贴密文函数
 const pasteCipherText = async () => {
-    try {
-        const text = await navigator.clipboard.readText()
-        cipherText.value = text
-        showToastMessage('已粘贴密文')
-    } catch (error) {
-        console.error('粘贴失败:', error)
-        showToastMessage('粘贴失败，请手动粘贴', 'error')
+    if (navigator.clipboard && navigator.clipboard.readText) {
+        try {
+            const text = await navigator.clipboard.readText()
+            if (text) {
+                cipherText.value = text
+                showToastMessage('已粘贴密文')
+                return text
+            } else {
+                showToastMessage('剪贴板为空', 'error')
+            }
+        } catch {
+            showToastMessage('粘贴失败，请手动粘贴', 'error')
+        }
+    } else {
+        showToastMessage('当前浏览器不支持一键粘贴，请手动粘贴', 'error')
     }
 }
 </script>
