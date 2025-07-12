@@ -73,6 +73,12 @@ const productList = [
     link: host + '/#/ciphertext',
     text: '阿星的简单加密'
   },
+  {
+    icon: '',
+    title: '阿星的gpt工具',
+    link: 'https://chat.xingxiaowu.cn',
+    text: '没事聊聊天呗'
+  },
 ]
 
 const goToUrl = (url: string) => {
