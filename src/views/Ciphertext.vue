@@ -13,13 +13,8 @@
             </div>
 
             <div class="text-area-group">
-                <label for="cipher-text">密文：</label>
-                <div class="textarea-with-buttons">
-                    <textarea
-                        id="cipher-text"
-                        v-model="cipherText"
-                        placeholder="请输入要解密的密文或加密后的密文将显示在这里..."
-                        class="text-area"></textarea>
+                <div class="label-with-buttons">
+                    <label for="cipher-text">密文：</label>
                     <div class="action-buttons">
                         <button @click="copyCipherText"
                             class="action-btn copy-btn" title="复制密文">
@@ -31,6 +26,11 @@
                         </button>
                     </div>
                 </div>
+                <textarea
+                    id="cipher-text"
+                    v-model="cipherText"
+                    placeholder="请输入要解密的密文或加密后的密文将显示在这里..."
+                    class="text-area"></textarea>
             </div>
         </div>
 
@@ -41,6 +41,11 @@
                 class="btn btn-decrypt">解密</button>
             <button @click="swap" class="btn btn-swap">交换</button>
             <button @click="clear" class="btn btn-clear">清空</button>
+        </div>
+        
+        <!-- Toast 提示 -->
+        <div v-if="showToast" class="toast" :class="`toast-${toastType}`">
+            {{ toastMessage }}
         </div>
     </div>
 </template>
@@ -111,50 +116,67 @@ const decryptRSA = (encryptedText: string, privateKey: string): string => {
 // 响应式数据
 const originalText = ref('')
 const cipherText = ref('')
+const showToast = ref(false)
+const toastMessage = ref('')
+const toastType = ref('success') // 'success' | 'error' | 'info'
+
+// 显示toast函数
+const showToastMessage = (message: string, type: 'success' | 'error' | 'info' = 'success') => {
+    toastMessage.value = message
+    toastType.value = type
+    showToast.value = true
+    
+    // 3秒后自动隐藏
+    setTimeout(() => {
+        showToast.value = false
+    }, 3000)
+}
 
 // 加密函数
 const encrypt = () => {
     if (!originalText.value.trim()) {
-        alert('请输入要加密的原文')
+        showToastMessage('请输入要加密的原文', 'error')
         return
     }
-
+    
     if (!RSA_PUBLIC_KEY) {
-        alert('请先配置RSA公钥')
+        showToastMessage('请先配置RSA公钥', 'error')
         return
     }
-
+    
     try {
         // 使用公钥加密原文
         const encrypted = encryptRSA(originalText.value, RSA_PUBLIC_KEY)
         cipherText.value = encrypted
+        showToastMessage('加密成功')
         console.log('加密成功:', encrypted)
     } catch (error) {
         console.error('加密失败:', error)
-        alert('加密失败，请检查密钥配置')
+        showToastMessage('加密失败，请检查密钥配置', 'error')
     }
 }
 
 // 解密函数
 const decrypt = () => {
     if (!cipherText.value.trim()) {
-        alert('请输入要解密的密文')
+        showToastMessage('请输入要解密的密文', 'error')
         return
     }
-
+    
     if (!RSA_PRIVATE_KEY) {
-        alert('请先配置RSA私钥')
+        showToastMessage('请先配置RSA私钥', 'error')
         return
     }
-
+    
     try {
         // 使用私钥解密密文
         const decrypted = decryptRSA(cipherText.value, RSA_PRIVATE_KEY)
         originalText.value = decrypted
+        showToastMessage('解密成功')
         console.log('解密成功:', decrypted)
     } catch (error) {
         console.error('解密失败:', error)
-        alert('解密失败，请检查密钥配置')
+        showToastMessage('解密失败，请检查密钥配置', 'error')
     }
 }
 
@@ -174,16 +196,16 @@ const clear = () => {
 // 复制密文函数
 const copyCipherText = async () => {
     if (!cipherText.value.trim()) {
-        alert('没有可复制的内容')
+        showToastMessage('没有可复制的内容', 'error')
         return
     }
-
+    
     try {
         await navigator.clipboard.writeText(cipherText.value)
-        alert('密文已复制到剪贴板')
+        showToastMessage('密文已复制到剪贴板')
     } catch (error) {
         console.error('复制失败:', error)
-        alert('复制失败，请手动复制')
+        showToastMessage('复制失败，请手动复制', 'error')
     }
 }
 
@@ -192,10 +214,10 @@ const pasteCipherText = async () => {
     try {
         const text = await navigator.clipboard.readText()
         cipherText.value = text
-        alert('已粘贴密文')
+        showToastMessage('已粘贴密文')
     } catch (error) {
         console.error('粘贴失败:', error)
-        alert('粘贴失败，请手动粘贴')
+        showToastMessage('粘贴失败，请手动粘贴', 'error')
     }
 }
 </script>
@@ -254,14 +276,14 @@ label {
     color: #666;
 }
 
-.textarea-with-buttons {
-    position: relative;
+.label-with-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
 }
 
 .action-buttons {
-    position: absolute;
-    top: 8px;
-    right: 8px;
     display: flex;
     gap: 5px;
 }
@@ -368,6 +390,43 @@ label {
     .btn {
         padding: 10px 16px;
         font-size: 14px;
+    }
+}
+
+/* Toast 样式 */
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 6px;
+    color: white;
+    font-size: 14px;
+    z-index: 1000;
+    animation: slideIn 0.3s ease-out;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.toast-success {
+    background-color: #4CAF50;
+}
+
+.toast-error {
+    background-color: #f44336;
+}
+
+.toast-info {
+    background-color: #2196F3;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
     }
 }
 </style>
