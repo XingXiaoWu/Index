@@ -75,6 +75,18 @@ const productList = [
   },
   {
     icon: '',
+    title: '阿星的图片工具',
+    link: host + '/#/image-tools',
+    text: '图片处理工具集：Base64转换、ICO转换、PDF转换、尺寸调整、图片压缩'
+  },
+  {
+    icon: '',
+    title: '阿星的文本工具',
+    link: host + '/#/text-tools',
+    text: '文本处理工具集：文本比较、大小写转换、编码转换'
+  },
+  {
+    icon: '',
     title: '阿星的gpt工具',
     link: 'https://chat.xingxiaowu.cn',
     text: '没事聊聊天呗'
