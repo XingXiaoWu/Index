@@ -9,9 +9,9 @@ import Pdf2Png from '../views/Pdf2Png.vue'
 import Ciphertext from '../views/Ciphertext.vue'
 import ImageTools from '../views/ImageTools.vue'
 import ImageBase64 from '../views/ImageBase64.vue'
-import ImageToIco from '../views/ImageToIco.vue'
-import ImagePdf from '../views/ImagePdf.vue'
-import ImageResize from '../views/ImageResize.vue'
+// import ImageToIco from '../views/ImageToIco.vue'
+// import ImagePdf from '../views/ImagePdf.vue'
+// import ImageResize from '../views/ImageResize.vue'
 import ImageCompress from '../views/ImageCompress.vue'
 import TextTools from '../views/TextTools.vue'
 import TextCompare from '../views/TextCompare.vue'
@@ -30,9 +30,9 @@ const routes: RouteRecordRaw[] = [
   // 图片工具
   { path: '/image-tools', component: ImageTools, name: "imageTools" },
   { path: '/image-base64', component: ImageBase64, name: "imageBase64" },
-  { path: '/image-to-ico', component: ImageToIco, name: "imageToIco" },
-  { path: '/image-pdf', component: ImagePdf, name: "imagePdf" },
-  { path: '/image-resize', component: ImageResize, name: "imageResize" },
+  // { path: '/image-to-ico', component: ImageToIco, name: "imageToIco" },
+  // { path: '/image-pdf', component: ImagePdf, name: "imagePdf" },
+  // { path: '/image-resize', component: ImageResize, name: "imageResize" },
   { path: '/image-compress', component: ImageCompress, name: "imageCompress" },
   // 文本工具
   { path: '/text-tools', component: TextTools, name: "textTools" },

@@ -24,24 +24,24 @@ const toolList = [
     link: host + '/#/image-base64',
     text: '将图片转换为Base64编码或将Base64解码为图片'
   },
-  {
-    icon: '',
-    title: '图片转ICO',
-    link: host + '/#/image-to-ico',
-    text: '将图片转换为ICO图标格式'
-  },
-  {
-    icon: '',
-    title: '图片和PDF互转',
-    link: host + '/#/image-pdf',
-    text: '图片转PDF或PDF转图片'
-  },
-  {
-    icon: '',
-    title: '图片尺寸调整',
-    link: host + '/#/image-resize',
-    text: '调整图片的宽度和高度'
-  },
+  // {
+  //   icon: '',
+  //   title: '图片转ICO',
+  //   link: host + '/#/image-to-ico',
+  //   text: '将图片转换为ICO图标格式'
+  // },
+  // {
+  //   icon: '',
+  //   title: '图片和PDF互转',
+  //   link: host + '/#/image-pdf',
+  //   text: '图片转PDF或PDF转图片'
+  // },
+  // {
+  //   icon: '',
+  //   title: '图片尺寸调整',
+  //   link: host + '/#/image-resize',
+  //   text: '调整图片的宽度和高度'
+  // },
   {
     icon: '',
     title: '图片压缩',
