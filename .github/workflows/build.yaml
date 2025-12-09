@@ -18,12 +18,12 @@ jobs:
       - name: install-nodejs
         uses: actions/setup-node@v2
         with:
-          node-version: '18.4.0'
+          node-version: '22.16.0'
           registry-url: 'https://registry.npmjs.org'
       - name: install pnpm
         uses: pnpm/action-setup@v2.0.1
         with:
-          version: 7.11
+          version: 10.12.1
       
       - name: pnpm install
         run: |
