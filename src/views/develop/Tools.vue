@@ -3,7 +3,8 @@
         <h2 class="flex-self-start">
             Docker工具
         </h2>
-        <GridComponent :proxyList="develop.dockerOrigin" />
+        <h3 class="flex-self-start mt-2">你知道的，很多东西下载很困难</h3>
+        <GridComponent class="mt-2" :proxyList="develop.dockerOrigin" />
     </div>
 </template>
 <script lang="ts" setup>
