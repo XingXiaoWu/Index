@@ -205,6 +205,12 @@ const AITools = {
             title: "我爱996",
             link: "https://529961.com",
             text: "https://linux.do/t/topic/1289560\n坦白的说，我不爱996\n抽奖"
+        },
+        {
+            icon: "",
+            title: "B4U",
+            link: "https://b4u.qzz.io",
+            text: "B4U"
         }
     ],
     supplement: [
