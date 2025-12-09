@@ -44,12 +44,6 @@ const homeData = [
     },
     {
         icon: '',
-        title: '阿星的安全工具',
-        link: '/#/hack-tools',
-        text: '阿星也有一个黑客梦'
-    },
-    {
-        icon: '',
         title: '阿星的饭醉集团',
         link: '/lunch.html',
         text: '饭醉分子'
@@ -89,6 +83,24 @@ const homeData = [
         title: '阿星的gpt工具',
         link: 'https://chat.xingxiaowu.cn',
         text: '没事聊聊天呗'
+    },
+       {
+        icon: '',
+        title: '阿星的安全工具',
+        link: '/#/hack-tools',
+        text: '阿星也有一个黑客梦'
+    },
+       {
+        icon: '',
+        title: '阿星的开发工具',
+        link: '/#/develop-tools',
+        text: '阿星的开发路上并不是一帆风顺'
+    },
+       {
+        icon: '',
+        title: '阿星发现的AI工具',
+        link: '/#/ai-tools',
+        text: '感谢各位公益大佬'
     },
 ]
 

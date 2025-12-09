@@ -1,6 +1,8 @@
 import { createRouter, createWebHashHistory, type RouteRecordRaw } from 'vue-router'
 import Index from '../views/Index.vue'
-import HackTools from '../views/hack/tools.vue'
+import HackTools from '../views/hack/Tools.vue'
+import DevelopTools from '../views/develop/Tools.vue'
+import AITools from '../views/ai/Tools.vue'
 import KeyValGenerator from '../views/KeyValGenerator.vue'
 import ThanksLiVue from '../views/ThanksLi.vue'
 import Fxkp from '../views/Fxkp.vue'
@@ -17,6 +19,7 @@ import TextTools from '../views/TextTools.vue'
 import TextCompare from '../views/TextCompare.vue'
 import TextCase from '../views/TextCase.vue'
 import TextEncode from '../views/TextEncode.vue'
+
 
 const routes: RouteRecordRaw[] = [
   { path: '/', component: Index, name: "index" },
@@ -40,6 +43,8 @@ const routes: RouteRecordRaw[] = [
   { path: '/text-encode', component: TextEncode, name: "textEncode" },
   // hack工具
   { path: '/hack-tools', component: HackTools, name: "hackTools" },
+  { path: '/develop-tools', component: DevelopTools, name: "developTools" },
+  { path: '/ai-tools', component: AITools, name: "AITools" },
 ]
 
 const router = createRouter({
