@@ -1,8 +1,8 @@
 import { createRouter, createWebHashHistory, type RouteRecordRaw } from 'vue-router'
 import Index from '../views/Index.vue'
+import HackTools from '../views/hack/tools.vue'
 import KeyValGenerator from '../views/KeyValGenerator.vue'
 import ThanksLiVue from '../views/ThanksLi.vue'
-import Safe from '../views/Safe.vue'
 import Fxkp from '../views/Fxkp.vue'
 import NetWorkTop from '../views/NetWorkTop.vue'
 import Pdf2Png from '../views/Pdf2Png.vue'
@@ -22,7 +22,6 @@ const routes: RouteRecordRaw[] = [
   { path: '/', component: Index, name: "index" },
   { path: '/KeyValGenerator', component: KeyValGenerator, name: "KeyValGenerator" },
   { path: '/thanks', component: ThanksLiVue, name: "thanks" },
-  { path: '/safe', component: Safe, name: "safe" },
   { path: '/network', component: NetWorkTop, name: "network" },
   { path: '/fxkp', component: Fxkp, name: "fxkp" },
   { path: '/pdf2png', component: Pdf2Png, name: "pdf2png" },
@@ -39,6 +38,8 @@ const routes: RouteRecordRaw[] = [
   { path: '/text-compare', component: TextCompare, name: "textCompare" },
   { path: '/text-case', component: TextCase, name: "textCase" },
   { path: '/text-encode', component: TextEncode, name: "textEncode" },
+  // hack工具
+  { path: '/hack-tools', component: HackTools, name: "hackTools" },
 ]
 
 const router = createRouter({
