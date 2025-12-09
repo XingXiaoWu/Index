@@ -1,6 +1,6 @@
 <template>
     <n-grid :cols="4" x-gap="8" y-gap="8" class="grid-container">
-        <n-gi v-for="(item, i) in proxyList" :key="i">
+        <n-gi v-for="(item, i) in productList" :key="i">
             <n-card :title="item.title" :class="i % 2 ? 'bg-light-200' : 'bg-light-800'"
                 class="hover:bg-light-blue-300 cursor-pointer card-item" @click="() => goToUrl(item.link)">
                 {{ item.text }}
@@ -11,7 +11,7 @@
 
 <script lang="ts" setup>
 
-interface ProxyItem {
+interface ProductItem {
     icon: string
     title: string
     link: string
@@ -19,10 +19,10 @@ interface ProxyItem {
 }
 
 interface Props {
-    proxyList: ProxyItem[]
+    productList: ProductItem[]
 }
 
-const { proxyList = [] } = defineProps<Props>()
+const { productList = [] } = defineProps<Props>()
 
 const goToUrl = (url: string) => {
     window.open(url)

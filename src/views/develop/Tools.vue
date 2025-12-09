@@ -4,7 +4,7 @@
             Docker工具
         </h2>
         <h3 class="flex-self-start mt-2">你知道的，很多东西下载很困难</h3>
-        <GridComponent class="mt-2" :proxyList="develop.dockerOrigin" />
+        <GridComponent class="mt-2" :productList="develop.dockerOrigin" />
     </div>
 </template>
 <script lang="ts" setup>

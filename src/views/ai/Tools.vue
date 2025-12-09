@@ -3,11 +3,11 @@
         <h2 class="flex-self-start">
             公益站
         </h2>
-        <GridComponent :proxyList="aiDataPublicelfare" />
+        <GridComponent :productList="AITools.publicelfare" />
     </div>
 </template>
 <script lang="ts" setup>
-import { aiDataPublicelfare } from '../../const/index'
+import { AITools } from '../../const/index'
 </script>
 
 <style scoped></style>

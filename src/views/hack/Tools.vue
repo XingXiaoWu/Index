@@ -3,7 +3,7 @@
         <h2 class="flex-self-start">
             代理工具
         </h2>
-        <GridComponent :proxyList="hackTools.proxy" />
+        <GridComponent :productList="hackTools.proxy" />
     </div>
 </template>
 <script lang="ts" setup>
