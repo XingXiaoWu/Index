@@ -3,6 +3,7 @@ import Index from '../views/Index.vue'
 import HackTools from '../views/hack/Tools.vue'
 import DevelopTools from '../views/develop/Tools.vue'
 import AITools from '../views/ai/Tools.vue'
+import AITools2 from '../views/ai/Tools2.vue'
 import KeyValGenerator from '../views/KeyValGenerator.vue'
 import ThanksLiVue from '../views/ThanksLi.vue'
 import Fxkp from '../views/Fxkp.vue'
@@ -45,6 +46,7 @@ const routes: RouteRecordRaw[] = [
   { path: '/hack-tools', component: HackTools, name: "hackTools" },
   { path: '/develop-tools', component: DevelopTools, name: "developTools" },
   { path: '/ai-tools', component: AITools, name: "AITools" },
+  { path: '/ai-tools2', component: AITools2, name: "AITools2" },
 ]
 
 const router = createRouter({

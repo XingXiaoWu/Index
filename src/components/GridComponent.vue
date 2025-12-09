@@ -45,5 +45,7 @@ const goToUrl = (url: string) => {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    white-space: pre-wrap;
+    word-wrap: break-word;
 }
 </style>

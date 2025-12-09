@@ -24,6 +24,20 @@ const develop = {
             link: 'https://status.1panel.top/status/docker',
             text: '实时监测，这下不得不说一声天才了'
         },
+        {
+            icon: '',
+            title: 'linuxmirrors',
+            link: 'https://linuxmirrors.cn/other/',
+            text: '脚本换源'
+        },
+    ],
+    pictureBed: [
+        {
+            icon: "",
+            title: "野兽图床",
+            link: "https://photo.459122.xyz/",
+            text: "虽说是图床，但是能存的可不止图"
+        },
     ]
 }
 export default develop
