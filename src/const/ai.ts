@@ -169,7 +169,7 @@ const AITools = {
             link: "https://ai.hybgzs.com/panel",
             text: "https://linux.do/t/topic/1084752\n欧阳淇淇\n抽奖"
         },
-        
+
         {
             icon: "",
             title: "FovtAPI",
@@ -199,6 +199,12 @@ const AITools = {
             title: "SoraApi",
             link: "https://api.67.si/",
             text: "https://linux.do/t/topic/1111114\n可以生成图片啦"
+        },
+        {
+            icon: "",
+            title: "我爱996",
+            link: "https://529961.com",
+            text: "https://linux.do/t/topic/1289560\n坦白的说，我不爱996\n抽奖"
         }
     ],
     supplement: [
@@ -243,6 +249,12 @@ const AITools = {
             title: "黑与白福利站NEXT",
             link: "https://next-cdk.hybgzs.com",
             text: "黑与白福利站NEXT"
+        },
+        {
+            icon: "",
+            title: "996果然要签到",
+            link: "https://hub.529961.com/",
+            text: "996果然要签到"
         },
     ],
     publicData: [
