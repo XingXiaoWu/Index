@@ -211,6 +211,12 @@ const AITools = {
             title: "B4U",
             link: "https://b4u.qzz.io",
             text: "B4U"
+        },
+        {
+            icon: "",
+            title: "fengyeai",
+            link: "https://fengyeai.chat/",
+            text: "fengyeai"
         }
     ],
     supplement: [
