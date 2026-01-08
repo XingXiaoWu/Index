@@ -13,7 +13,7 @@
     <link rel="apple-touch-icon-precomposed" href="https://s3-us-west-2.amazonaws.com/s.cdpn.io/329180/firework-burst-icon-v2.png">
     <meta name="msapplication-TileColor" content="#000000">
     <meta name="msapplication-TileImage" content="https://s3-us-west-2.amazonaws.com/s.cdpn.io/329180/firework-burst-icon-v2.png">
-    <link href="https://fonts.googleapis.com/css?family=Russo+One" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Russo+One|Ma+Shan+Zheng" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
 
 
@@ -1378,47 +1378,49 @@
         // -----------
         
         function seqRandomShell() {
-        	const size = getRandomShellSize();
-        	const shell = new Shell(shellFromConfig(size.size));
-        	shell.launch(size.x, size.height);
-        	
-        	let extraDelay = shell.starLife;
-        	if (shell.fallingLeaves) {
-        		extraDelay = 4600;
+        	// Launch 5 random shells
+        	for (let i = 0; i < 5; i++) {
+        		const size = getRandomShellSize();
+        		const shell = new Shell(shellFromConfig(size.size));
+        		const xOffset = Math.random() * 0.4 + 0.3;
+        		const yOffset = Math.random() * 0.3 + 0.3;
+        		setTimeout(() => {
+        			shell.launch(xOffset, yOffset);
+        		}, i * 150);
         	}
         	
-        	return 900 + Math.random() * 600 + extraDelay;
+        	return 3500;
         }
         
         function seqRandomFastShell() {
-        	const shellType = randomFastShell();
-        	const size = getRandomShellSize();
-        	const shell = new Shell(shellType(size.size));
-        	shell.launch(size.x, size.height);
+        	// Launch 5 fast shells
+        	for (let i = 0; i < 5; i++) {
+        		const shellType = randomFastShell();
+        		const size = getRandomShellSize();
+        		const shell = new Shell(shellType(size.size));
+        		const xOffset = Math.random() * 0.8 + 0.1;
+        		const yOffset = Math.random() * 0.4 + 0.3;
+        		setTimeout(() => {
+        			shell.launch(xOffset, yOffset);
+        		}, i * 120);
+        	}
         	
-        	let extraDelay = shell.starLife;
-        	
-        	return 900 + Math.random() * 600 + extraDelay;
+        	return 3500;
         }
         
         function seqTwoRandom() {
-        	const size1 = getRandomShellSize();
-        	const size2 = getRandomShellSize();
-        	const shell1 = new Shell(shellFromConfig(size1.size));
-        	const shell2 = new Shell(shellFromConfig(size2.size));
-        	const leftOffset = Math.random() * 0.2 - 0.1;
-        	const rightOffset = Math.random() * 0.2 - 0.1;
-        	shell1.launch(0.3 + leftOffset, size1.height);
-        	setTimeout(() => {
-        		shell2.launch(0.7 + rightOffset, size2.height);
-        	}, 100);
-        	
-        	let extraDelay = Math.max(shell1.starLife, shell2.starLife);
-        	if (shell1.fallingLeaves || shell2.fallingLeaves) {
-        		extraDelay = 4600;
+        	// Launch 5 random shells instead of 2
+        	for (let i = 0; i < 5; i++) {
+        		const size = getRandomShellSize();
+        		const shell = new Shell(shellFromConfig(size.size));
+        		const xOffset = Math.random() * 0.8 + 0.1;
+        		const yOffset = Math.random() * 0.4 + 0.3;
+        		setTimeout(() => {
+        			shell.launch(xOffset, yOffset);
+        		}, i * 120);
         	}
         	
-        	return 900 + Math.random() * 600 + extraDelay;
+        	return 3500;
         }
         
         function seqTriple() {
@@ -1972,8 +1974,8 @@
         		mainCtx.lineWidth = 2;
         		mainCtx.textAlign = 'center';
         		mainCtx.textBaseline = 'middle';
-        		mainCtx.font = 'bold 80px "Russo One", arial, sans-serif';
-        		
+        		mainCtx.font = '80px "Ma Shan Zheng", cursive, sans-serif';
+        			
         		// Draw glow effect
         		mainCtx.shadowColor = 'rgba(255, 255, 255, 0.8)';
         		mainCtx.shadowBlur = 20;
