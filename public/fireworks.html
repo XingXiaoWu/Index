@@ -1690,6 +1690,18 @@
         let speedBarOpacity = 0;
         let autoLaunchTime = 0;
         
+        // Text display for first explosion
+        let hasShownText = false;
+        let textDisplay = {
+            show: false,
+            x: 0,
+            y: 0,
+            opacity: 0,
+            scale: 1,
+            opacityIncreasing: true,
+            startTime: 0
+        };
+        
         function updateSpeedFromEvent(event) {
         	if (isUpdatingSpeed || event.y >= mainStage.height - 44) {
         		// On phones it's hard to hit the edge pixels in order to set speed at 0 or 1, so some padding is provided to make that easier.
@@ -1926,6 +1938,52 @@
         		mainCtx.fillStyle = COLOR.Blue;
         		mainCtx.fillRect(0, height - speedBarHeight, width * simSpeed, speedBarHeight);
         		mainCtx.globalAlpha = 1;
+        	}
+        	
+        	// Render text if first explosion happened
+        	if (textDisplay.show) {
+        		// Check if 3 seconds have passed
+        		const elapsed = Date.now() - textDisplay.startTime;
+        		if (elapsed > 3000) {
+        			// Fade out
+        			textDisplay.opacity -= 0.03 * speed;
+        			if (textDisplay.opacity <= 0) {
+        				textDisplay.show = false;
+        				textDisplay.opacity = 0;
+        			}
+        		}
+        		// Update text animation
+        		else if (textDisplay.opacityIncreasing) {
+        			textDisplay.opacity += 0.02 * speed;
+        			if (textDisplay.opacity >= 1) {
+        				textDisplay.opacity = 1;
+        				textDisplay.opacityIncreasing = false;
+        			}
+        		}
+        		
+        		// Draw text
+        		if (textDisplay.show) {
+        		mainCtx.save();
+        		mainCtx.translate(textDisplay.x, textDisplay.y);
+        		mainCtx.scale(textDisplay.scale, textDisplay.scale);
+        		mainCtx.globalAlpha = textDisplay.opacity;
+        		mainCtx.fillStyle = '#ffffff';
+        		mainCtx.strokeStyle = '#ffffff';
+        		mainCtx.lineWidth = 2;
+        		mainCtx.textAlign = 'center';
+        		mainCtx.textBaseline = 'middle';
+        		mainCtx.font = 'bold 80px "Russo One", arial, sans-serif';
+        		
+        		// Draw glow effect
+        		mainCtx.shadowColor = 'rgba(255, 255, 255, 0.8)';
+        		mainCtx.shadowBlur = 20;
+        		
+        		// Draw the text
+        		mainCtx.fillText('李竺琳', 0, 0);
+        		mainCtx.strokeText('李竺琳', 0, 0);
+        		
+        		mainCtx.restore();
+        		}
         	}
         	
         	
@@ -2228,7 +2286,19 @@
         	burst(x, y) {
         		// Set burst speed so overall burst grows to set size. This specific formula was derived from testing, and is affected by simulated air drag.
         		const speed = this.spreadSize / 96;
-        
+
+        		// Show text on first explosion
+        		if (!hasShownText && this.comet) {
+        			hasShownText = true;
+        			textDisplay.show = true;
+        			textDisplay.x = x;
+        			textDisplay.y = y;
+        			textDisplay.opacity = 0;
+        			textDisplay.scale = 1;
+        			textDisplay.opacityIncreasing = true;
+        			textDisplay.startTime = Date.now();
+        		}
+
         		let color, onDeath, sparkFreq, sparkSpeed, sparkLife;
         		let sparkLifeVariation = 0.25;
         		// Some death effects, like crackle, play a sound, but should only be played once.
