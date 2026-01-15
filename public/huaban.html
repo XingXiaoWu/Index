@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>仿真花瓣拖动+自动轨迹特效</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: #000; /* 黑色背景 */
+            overflow: hidden;
+        }
+        #petalCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none; /* 不遮挡鼠标事件 */
+        }
+    </style>
+</head>
+<body>
+    <canvas id="petalCanvas"></canvas>
+
+    <script>
+        // 获取Canvas和上下文
+        const canvas = document.getElementById('petalCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // 核心变量
+        let petals = []; // 花瓣数组
+        let trailPoints = []; // 轨迹点数组（手动+自动）
+        let isDragging = false; // 标记是否长按拖动
+        let autoPathTimer = null; // 自动路径定时器
+        let lastMouseX = canvas.width / 2; // 记录最后一次鼠标位置X
+        let lastMouseY = canvas.height / 2; // 记录最后一次鼠标位置Y
+        const TRAIL_DURATION = 1000; // 轨迹保留时间（1秒）
+        const AUTO_PATH_INTERVAL = 80; // 自动生成路径的间隔（ms），越小越密集
+        // 仿真花瓣颜色（带高光渐变）
+        const petalColors = [
+            { base: 'rgba(255, 190, 200, {alpha})', highlight: 'rgba(255, 220, 225, {alpha})' },
+            { base: 'rgba(255, 110, 180, {alpha})', highlight: 'rgba(255, 140, 200, {alpha})' },
+            { base: 'rgba(255, 30, 150, {alpha})', highlight: 'rgba(255, 60, 170, {alpha})' },
+            { base: 'rgba(240, 130, 130, {alpha})', highlight: 'rgba(245, 160, 160, {alpha})' },
+        ];
+
+        // -------------------------- 鼠标事件监听 --------------------------
+        // 1. 鼠标按下：暂停自动生成，开启手动拖动
+        window.addEventListener('mousedown', (e) => {
+            if (e.button === 0) { // 仅左键
+                isDragging = true;
+                pauseAutoPath(); // 暂停自动路径
+                // 记录鼠标按下位置
+                lastMouseX = e.clientX;
+                lastMouseY = e.clientY;
+                addTrailPoint(e.clientX, e.clientY);
+                createPetals(e.clientX, e.clientY);
+            }
+        });
+
+        // 2. 鼠标移动：仅长按期间生成手动轨迹
+        window.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                // 持续更新最后一次鼠标位置
+                lastMouseX = e.clientX;
+                lastMouseY = e.clientY;
+                addTrailPoint(e.clientX, e.clientY);
+                createPetals(e.clientX, e.clientY);
+            }
+        });
+
+        // 3. 鼠标松开/离开：恢复自动生成，停止手动拖动
+        window.addEventListener('mouseup', (e) => {
+            isDragging = false;
+            // 记录松开位置，作为自动路径新起点
+            if (e) {
+                lastMouseX = e.clientX;
+                lastMouseY = e.clientY;
+            }
+            startAutoPath(); // 恢复自动路径
+        });
+        window.addEventListener('mouseleave', (e) => {
+            isDragging = false;
+            // 记录离开位置，作为自动路径新起点
+            if (e) {
+                lastMouseX = e.clientX;
+                lastMouseY = e.clientY;
+            }
+            startAutoPath(); // 恢复自动路径
+        });
+
+        // -------------------------- 自动路径核心逻辑 --------------------------
+        // 自动路径的状态变量
+        let autoX = lastMouseX; // 自动路径初始X（最后一次鼠标位置）
+        let autoY = lastMouseY; // 自动路径初始Y（最后一次鼠标位置）
+        // 速度提升5倍：原(±1.5) → 现在(±15)，限制上限也同步提升5倍
+        let autoDirX = (Math.random() - 0.5) * 15; // 自动路径X方向速度（5倍速）
+        let autoDirY = (Math.random() - 0.5) * 15; // 自动路径Y方向速度（5倍速）
+
+        // 启动自动生成不规则路径
+        function startAutoPath() {
+            // 避免重复开启定时器
+            if (autoPathTimer) return;
+            // 重置自动路径起点为最后一次鼠标位置
+            autoX = lastMouseX;
+            autoY = lastMouseY;
+            // 定时生成不规则路径点
+            autoPathTimer = setInterval(() => {
+                if (isDragging) return; // 长按期间跳过自动生成
+
+                // 1. 随机调整方向（模拟不规则路径）
+                if (Math.random() < 0.15) { // 15%概率变向，避免直线
+                    autoDirX += (Math.random() - 0.5) * 10; // 变向幅度也提升5倍
+                    autoDirY += (Math.random() - 0.5) * 10;
+                }
+
+                // 2. 限制方向速度（上限同步提升5倍：原±4 → 现在±20）
+                autoDirX = Math.max(-20, Math.min(20, autoDirX));
+                autoDirY = Math.max(-20, Math.min(20, autoDirY));
+
+                // 3. 更新自动路径坐标
+                autoX += autoDirX;
+                autoY += autoDirY;
+
+                // 4. 边界检测：碰到屏幕边缘反弹
+                if (autoX < 0 || autoX > canvas.width) autoDirX *= -1;
+                if (autoY < 0 || autoY > canvas.height) autoDirY *= -1;
+
+                // 5. 生成自动路径的轨迹点和花瓣
+                addTrailPoint(autoX, autoY);
+                createPetals(autoX, autoY);
+            }, AUTO_PATH_INTERVAL);
+        }
+
+        // 暂停自动生成路径
+        function pauseAutoPath() {
+            clearInterval(autoPathTimer);
+            autoPathTimer = null;
+        }
+
+        // -------------------------- 原有核心功能 --------------------------
+        // 添加轨迹点函数
+        function addTrailPoint(x, y) {
+            trailPoints.push({ x, y, timestamp: Date.now(), alpha: 1 });
+        }
+
+        // 生成仿真花瓣
+        function createPetals(x, y) {
+            for (let i = 0; i < 6; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const rotateSpeed = (Math.random() - 0.5) * 0.08;
+                const petalColor = petalColors[Math.floor(Math.random() * petalColors.length)];
+                const width = Math.random() * 10 + 6;
+                const height = Math.random() * 8 + 4;
+                const curve = Math.random() * 0.3 + 0.1;
+
+                petals.push({
+                    x, y, width, height, color: petalColor, curve,
+                    speedX: Math.random() * 8 - 4, speedY: Math.random() * 8 - 4,
+                    alpha: 1, decay: Math.random() * 0.006 + 0.001,
+                    angle, rotateSpeed, swing: Math.random() * 0.02 - 0.01, swingAngle: 0
+                });
+            }
+        }
+
+        // 绘制仿真花瓣
+        function drawPetal(petal) {
+            ctx.save();
+            ctx.translate(petal.x, petal.y);
+            ctx.rotate(petal.angle + petal.swingAngle);
+
+            // 渐变填充（高光+基础色）
+            const gradient = ctx.createLinearGradient(
+                -petal.width * 0.5, -petal.height * 0.5,
+                petal.width * 0.5, petal.height * 0.5
+            );
+            const baseColor = petal.color.base.replace('{alpha}', petal.alpha);
+            const highlightColor = petal.color.highlight.replace('{alpha}', petal.alpha);
+            gradient.addColorStop(0, highlightColor);
+            gradient.addColorStop(1, baseColor);
+
+            // 贝塞尔曲线绘制不规则花瓣
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.moveTo(0, -petal.height * 0.5);
+            ctx.bezierCurveTo(
+                -petal.width * (0.5 + petal.curve), -petal.height * 0.3,
+                -petal.width * (0.5 + petal.curve), petal.height * 0.3,
+                0, petal.height * 0.5
+            );
+            ctx.bezierCurveTo(
+                petal.width * 0.5, petal.height * 0.3,
+                petal.width * 0.5, -petal.height * 0.3,
+                0, -petal.height * 0.5
+            );
+            ctx.fill();
+            ctx.restore();
+        }
+
+        // 绘制轨迹（高亮混合色+发散阴影）
+        function drawTrail() {
+            if (trailPoints.length < 2) return;
+
+            ctx.save();
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.lineWidth = 4;
+            ctx.shadowBlur = 15;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 0;
+            ctx.shadowColor = 'rgba(255, 150, 200, 0.8)';
+
+            for (let i = 0; i < trailPoints.length - 1; i++) {
+                const p1 = trailPoints[i];
+                const p2 = trailPoints[i + 1];
+                const elapsed = Date.now() - p1.timestamp;
+
+                p1.alpha = elapsed < TRAIL_DURATION ? 1 : 1 - (elapsed - TRAIL_DURATION) / 500;
+                if (p1.alpha <= 0) {
+                    trailPoints.splice(i, 1);
+                    i--;
+                    continue;
+                }
+
+                ctx.strokeStyle = `rgba(255, 180, 210, ${p1.alpha})`;
+                ctx.beginPath();
+                ctx.moveTo(p1.x, p1.y);
+                ctx.lineTo(p2.x, p2.y);
+                ctx.stroke();
+            }
+            ctx.restore();
+        }
+
+        // 动画循环
+        function animate() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            drawTrail(); // 绘制轨迹
+
+            // 更新并绘制花瓣
+            for (let i = petals.length - 1; i >= 0; i--) {
+                const p = petals[i];
+                drawPetal(p);
+
+                p.x += p.speedX;
+                p.y += p.speedY;
+                p.angle += p.rotateSpeed;
+                p.swingAngle += p.swing;
+                p.alpha -= p.decay;
+                p.speedX *= 0.985;
+                p.speedY *= 0.985;
+                p.swing *= 0.99;
+
+                if (p.alpha <= 0) petals.splice(i, 1);
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        // 初始化：启动自动路径+开始动画
+        startAutoPath();
+        animate();
+
+        // 窗口缩放适配
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
