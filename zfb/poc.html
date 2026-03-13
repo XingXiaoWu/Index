@@ -8,13 +8,91 @@
 </head>
 
 <body>
+    <h1>歪比巴卜送红包啦</h1>
+    <div id="buttons-container">
+        <button onclick="func1()">1 - 点击转账给歪比巴卜</button>
+        <button onclick="func2()">2 - pushWindow 执行转账 DeepLink</button>
+        <button onclick="func3()">3 - pushWindow 打开支付收银台</button>
+        <button onclick="func4()">4 - 生成随机数</button>
+        <button onclick="func5()">5 - 显示时间</button>
+        <button onclick="func6()">6 - 切换主题</button>
+        <button onclick="func7()">7 - 计数器</button>
+        <button onclick="func8()">8 - 显示问候</button>
+        <button onclick="func9()">9 - 清空日志</button>
+        <button onclick="func10()">10 - 转账通知</button>
+    </div>
+    <div id="log" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc; min-height: 100px;"></div>
+
     <script>
-        // 显示假转账通知
-        AlipayJSBridge.call("toast", {
-            content: "转账¥5,000 给歪比巴卜成功",
-            type: "success",
-            duration: 5000
-        });
+        let counter = 0;
+        let isDarkTheme = false;
+
+        function func1() {
+            AlipayJSBridge.call("startApp", { appId: "09999988", param: { actionType: "toAccount", account: "329106954@qq.com", amount: "0.01" } })
+        }
+
+        function func2() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#6c5ce7'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            document.body.style.backgroundColor = randomColor;
+        }
+
+        function func3() {
+            let count = 5;
+            const interval = setInterval(() => {
+                document.getElementById('log').innerHTML += `<p>倒计时: ${count}</p>`;
+                count--;
+                if (count < 0) {
+                    clearInterval(interval);
+                    document.getElementById('log').innerHTML += `<p>倒计时结束！</p>`;
+                }
+            }, 1000);
+        }
+
+        function func4() {
+            const randomNum = Math.floor(Math.random() * 1000);
+            document.getElementById('log').innerHTML += `<p>生成的随机数: ${randomNum}</p>`;
+        }
+
+        function func5() {
+            const now = new Date();
+            document.getElementById('log').innerHTML += `<p>当前时间: ${now.toLocaleString()}</p>`;
+        }
+
+        function func6() {
+            isDarkTheme = !isDarkTheme;
+            if (isDarkTheme) {
+                document.body.style.color = '#fff';
+                document.body.style.backgroundColor = '#333';
+            } else {
+                document.body.style.color = '#000';
+                document.body.style.backgroundColor = '#fff';
+            }
+        }
+
+        function func7() {
+            counter++;
+            document.getElementById('log').innerHTML += `<p>计数器: ${counter}</p>`;
+        }
+
+        function func8() {
+            const greetings = ['你好！', '欢迎！', '大家好！', '歪比巴卜！', '红包来啦！'];
+            const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+            document.getElementById('log').innerHTML += `<p>${greeting}</p>`;
+        }
+
+        function func9() {
+            document.getElementById('log').innerHTML = '<p>日志已清空</p>';
+        }
+
+        function func10() {
+            // 显示假转账通知
+            AlipayJSBridge.call("toast", {
+                content: "转账¥5,000 给歪比巴卜成功",
+                type: "success",
+                duration: 5000
+            });
+        }
     </script>
 </body>
 
