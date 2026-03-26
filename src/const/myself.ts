@@ -28,7 +28,7 @@ const tools = {
         {
             icon: '',
             title: '阿星的饭醉集团',
-            link: '/lunch.html',
+            link: '/#/myself-food',
             text: '饭醉分子'
         },
         {

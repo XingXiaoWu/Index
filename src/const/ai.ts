@@ -33,12 +33,12 @@ const AITools = {
             link: "https://api.colin1112.me/",
             text: "https://linux.do/t/topic/977702\n抽奖"
         },
-        {
-            icon: "",
-            title: "zenscaleai",
-            link: "https://gy.zenscaleai.com/",
-            text: "https://linux.do/t/topic/1030723\n古希腊掌管哈基米的神\n签到"
-        },
+        // {
+        //     icon: "",
+        //     title: "zenscaleai",
+        //     link: "https://gy.zenscaleai.com/",
+        //     text: "https://linux.do/t/topic/1030723\n古希腊掌管哈基米的神\n签到"
+        // },
 
         {
             icon: "",
@@ -46,42 +46,42 @@ const AITools = {
             link: "https://x666.me/",
             text: "薄荷AI,无须多言\n抽奖"
         },
-        {
-            icon: "",
-            title: "FreeKEY",
-            link: "https://api.freekey.site/",
-            text: "https://linux.do/t/topic/960621\nFreeKEY，爱您"
-        },
-        {
-            icon: "",
-            title: "runAnytime",
-            link: "https://veloera.wenwen12345.top/",
-            text: "https://linux.do/raw/747213\n随时跑路？大哥你是最持久的了！\n签到"
-        },
-        {
-            icon: "",
-            title: "fanyi",
-            link: "https://fanyi.963312.xyz/",
-            text: "https://linux.do/t/topic/1012188\n古希腊掌管翻译的神"
-        },
-        {
-            icon: "",
-            title: "963312",
-            link: "https://fanyi.963312.xyz/",
-            text: "和👈同宗同源了属于是"
-        },
-        {
-            icon: "",
-            title: "红石一级",
-            link: "https://api.hongshi.ggff.net",
-            text: "https://linux.do/t/topic/1209940\n为什么高中生们这么强"
-        },
-        {
-            icon: "",
-            title: "红石二级",
-            link: "https://hongshi1024-l-api.hf.space",
-            text: "https://linux.do/t/topic/1209940\n为什么高中生们这么强"
-        },
+        // {
+        //     icon: "",
+        //     title: "FreeKEY",
+        //     link: "https://api.freekey.site/",
+        //     text: "https://linux.do/t/topic/960621\nFreeKEY，爱您"
+        // },
+        // {
+        //     icon: "",
+        //     title: "runAnytime",
+        //     link: "https://veloera.wenwen12345.top/",
+        //     text: "https://linux.do/raw/747213\n随时跑路？大哥你是最持久的了！\n签到"
+        // },
+        // {
+        //     icon: "",
+        //     title: "fanyi",
+        //     link: "https://fanyi.963312.xyz/",
+        //     text: "https://linux.do/t/topic/1012188\n古希腊掌管翻译的神"
+        // },
+        // {
+        //     icon: "",
+        //     title: "963312",
+        //     link: "https://fanyi.963312.xyz/",
+        //     text: "和👈同宗同源了属于是"
+        // },
+        // {
+        //     icon: "",
+        //     title: "红石一级",
+        //     link: "https://api.hongshi.ggff.net",
+        //     text: "https://linux.do/t/topic/1209940\n为什么高中生们这么强"
+        // },
+        // {
+        //     icon: "",
+        //     title: "红石二级",
+        //     link: "https://hongshi1024-l-api.hf.space",
+        //     text: "https://linux.do/t/topic/1209940\n为什么高中生们这么强"
+        // },
         {
             icon: "",
             title: "dev88",
