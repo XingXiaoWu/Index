@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>3D 空心漩涡粒子心形动效</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #000;
+        }
+
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ES模块映射配置 -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.158.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.158.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module">
+        // 正确导入Three.js核心和扩展库
+        import * as THREE from 'three';
+        import { FontLoader } from 'three/addons/loaders/FontLoader.js';
+        import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
+
+        // 基础场景配置
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0x000000);
+        document.body.appendChild(renderer.domElement);
+
+        // 核心参数配置
+        const totalParticleCount = 20000;
+        const heartParticleCount = 12000; 
+        const vortexParticleCount = totalParticleCount - heartParticleCount; 
+        
+        // 粒子数据存储
+        const particles = new THREE.BufferGeometry();
+        const positions = new Float32Array(totalParticleCount * 3);
+        const targetPositions = new Float32Array(totalParticleCount * 3);
+        const particleStates = new Array(totalParticleCount);
+        const vortexParams = new Array(totalParticleCount);
+
+        // 关键：添加渲染状态控制
+        let heartInitialized = false; // 标记心形是否完成初始渲染
+        let initFrameCount = 0;       // 初始渲染帧数计数器
+        const INIT_FRAME_THRESHOLD = 60; // 等待60帧（约1秒）确保心形稳定
+
+        // 心形位置生成函数（放大3倍）
+        function getHeartPosition() {
+            const t = Math.random() * Math.PI * 2;
+            const x = 16 * Math.pow(Math.sin(t), 3);
+            const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+            const offset = Math.random() * 0.9;
+            return {
+                x: x * 0.66 * offset,
+                y: y * 0.66 * offset + 8, // 心形中心Y轴=8
+                z: (Math.random() - 0.5) * 9
+            };
+        }
+
+        // 初始化粒子
+        function initParticles() {
+            const allHeartPositions = [];
+            for (let i = 0; i < totalParticleCount; i++) {
+                allHeartPositions.push(getHeartPosition());
+            }
+
+            // 初始化心形粒子
+            for (let i = 0; i < heartParticleCount; i++) {
+                const radius = 8 + Math.random() * 4;
+                const angle = Math.random() * Math.PI * 2;
+                positions[i * 3] = Math.cos(angle) * radius;
+                positions[i * 3 + 1] = -20 + Math.random() * 1;
+                positions[i * 3 + 2] = Math.sin(angle) * radius;
+                
+                targetPositions[i * 3] = allHeartPositions[i].x;
+                targetPositions[i * 3 + 1] = allHeartPositions[i].y;
+                targetPositions[i * 3 + 2] = allHeartPositions[i].z;
+                
+                particleStates[i] = 1;
+                vortexParams[i] = {
+                    radius: radius,
+                    angleSpeed: Math.random() * 0.04 + 0.015
+                };
+            }
+
+            // 初始化空心漩涡粒子
+            for (let i = heartParticleCount; i < totalParticleCount; i++) {
+                const radius = 8 + Math.random() * 4;
+                const angle = Math.random() * Math.PI * 2;
+                const height = -20 + Math.random() * 3;
+                positions[i * 3] = Math.cos(angle) * radius;
+                positions[i * 3 + 1] = height;
+                positions[i * 3 + 2] = Math.sin(angle) * radius;
+                
+                targetPositions[i * 3] = allHeartPositions[i].x;
+                targetPositions[i * 3 + 1] = allHeartPositions[i].y;
+                targetPositions[i * 3 + 2] = allHeartPositions[i].z;
+                
+                particleStates[i] = 0;
+                vortexParams[i] = {
+                    radius: radius,
+                    angleSpeed: Math.random() * 0.05 + 0.02,
+                    heightSpeed: (Math.random() - 0.5) * 0.01,
+                    drift: (Math.random() - 0.5) * 0.02
+                };
+            }
+        }
+
+        // 初始化粒子
+        initParticles();
+
+        // 粒子材质
+        particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const material = new THREE.PointsMaterial({
+            color: 0xff69b4, // 心形主粉色
+            size: 0.25,
+            transparent: true,
+            opacity: 0.85,
+            depthWrite: false, // 关闭深度写入，避免遮挡文字
+            blending: THREE.NormalBlending,
+            sizeAttenuation: true
+        });
+
+        const particleSystem = new THREE.Points(particles, material);
+        scene.add(particleSystem);
+
+        // ---------------------- 3D文字“李竺琳” ----------------------
+        let textMesh;
+        
+        // 优先加载可靠的中文字体
+        const fontLoader = new FontLoader();
+        const fontUrl = 'https://cdn.jsdelivr.net/gh/mrdoob/three.js/dev/examples/fonts/json/helvetiker_regular.typeface.json';
+        
+        // 先创建临时文字占位
+        createTempText();
+        
+        fontLoader.load(
+            fontUrl,
+            function (font) {
+                scene.remove(textMesh);
+                
+                // 创建真实3D文字
+                const textGeometry = new TextGeometry('李竺琳', {
+                    font: font,
+                    size: 4,
+                    height: 1.0,
+                    curveSegments: 12,
+                    bevelEnabled: true,
+                    bevelThickness: 0.2,
+                    bevelSize: 0.15,
+                    bevelOffset: 0,
+                    bevelSegments: 5
+                });
+                
+                // 文字材质
+                const textMaterial = new THREE.MeshPhongMaterial({
+                    color: 0xff3399,
+                    specular: 0xff3399,
+                    shininess: 100,
+                    depthTest: true,
+                    depthWrite: true
+                });
+                
+                // 创建文字网格并居中
+                textMesh = new THREE.Mesh(textGeometry, textMaterial);
+                textGeometry.computeBoundingBox();
+                const box = textGeometry.boundingBox;
+                const centerOffset = new THREE.Vector3(
+                    -(box.max.x - box.min.x) / 2,
+                    -(box.max.y - box.min.y) / 2,
+                    -(box.max.z - box.min.z) / 2
+                );
+                textMesh.geometry.applyMatrix4(new THREE.Matrix4().makeTranslation(centerOffset.x, centerOffset.y, centerOffset.z));
+                textMesh.position.set(0, 18, 0); // 心形正上方
+                
+                // 关键：初始时文字角度和心形保持一致
+                textMesh.rotation.y = particleSystem.rotation.y;
+                
+                scene.add(textMesh);
+                console.log('3D文字加载成功！');
+            },
+            (xhr) => {
+                console.log(`字体加载进度: ${(xhr.loaded / xhr.total) * 100}%`);
+            },
+            (err) => {
+                console.warn('字体加载失败，使用HTML文字替代:', err);
+                createHtmlTextFallback();
+            }
+        );
+
+        // 创建临时占位文字
+        function createTempText() {
+            const textGroup = new THREE.Group();
+            const charMaterial = new THREE.MeshPhongMaterial({
+                color: 0xff3399,
+                specular: 0xff3399,
+                shininess: 100,
+                emissive: 0xff1188,
+                emissiveIntensity: 0.4
+            });
+
+            // 李
+            const liGroup = new THREE.Group();
+            const liVertical = new THREE.Mesh(new THREE.BoxGeometry(0.8, 4, 1), charMaterial);
+            liVertical.position.set(-0.5, 0, 0);
+            const liHorizontal = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.8, 1), charMaterial);
+            liHorizontal.position.set(0, 1.5, 0);
+            liGroup.add(liVertical, liHorizontal);
+            liGroup.position.x = -6;
+            
+            // 竺
+            const zhuGroup = new THREE.Group();
+            const zhuVertical = new THREE.Mesh(new THREE.BoxGeometry(0.8, 4, 1), charMaterial);
+            zhuVertical.position.set(-0.5, 0, 0);
+            const zhuHorizontal1 = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.8, 1), charMaterial);
+            zhuHorizontal1.position.set(0, 1.5, 0);
+            const zhuHorizontal2 = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.8, 1), charMaterial);
+            zhuHorizontal2.position.set(0, -1.5, 0);
+            zhuGroup.add(zhuVertical, zhuHorizontal1, zhuHorizontal2);
+            zhuGroup.position.x = 0;
+            
+            // 琳
+            const linGroup = new THREE.Group();
+            const linVertical1 = new THREE.Mesh(new THREE.BoxGeometry(0.8, 4, 1), charMaterial);
+            linVertical1.position.set(-1, 0, 0);
+            const linVertical2 = new THREE.Mesh(new THREE.BoxGeometry(0.8, 4, 1), charMaterial);
+            linVertical2.position.set(1, 0, 0);
+            const linHorizontal = new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.8, 1), charMaterial);
+            linHorizontal.position.set(0, 0, 0);
+            linGroup.add(linVertical1, linVertical2, linHorizontal);
+            linGroup.position.x = 6;
+
+            textGroup.add(liGroup, zhuGroup, linGroup);
+            textGroup.position.set(0, 18, 0);
+            // 关键：初始角度同步
+            textGroup.rotation.y = particleSystem.rotation.y;
+            scene.add(textGroup);
+            textMesh = textGroup;
+            
+            console.log('已创建临时文字占位');
+        }
+
+        // 创建HTML文字替代方案
+        function createHtmlTextFallback() {
+            const textDiv = document.createElement('div');
+            textDiv.style.position = 'absolute';
+            textDiv.style.top = '50%';
+            textDiv.style.left = '50%';
+            textDiv.style.transform = 'translate(-50%, -150%)';
+            textDiv.style.fontSize = '48px';
+            textDiv.style.fontWeight = 'bold';
+            textDiv.style.color = '#ff3399';
+            textDiv.style.textShadow = '0 0 10px #ff3399, 0 0 20px #ff3399';
+            textDiv.style.pointerEvents = 'none';
+            textDiv.style.zIndex = '100';
+            textDiv.textContent = '李竺琳';
+            document.body.appendChild(textDiv);
+            
+            if (textMesh) {
+                scene.remove(textMesh);
+            }
+            
+            // 关键：HTML文字也等待心形初始化完成后再旋转
+            let rotation = particleSystem.rotation.y * 180 / Math.PI;
+            function rotateHtmlText() {
+                if (heartInitialized) {
+                    rotation += 0.003 * 180 / Math.PI;
+                    textDiv.style.transform = `translate(-50%, -150%) rotateY(${rotation}deg)`;
+                }
+                requestAnimationFrame(rotateHtmlText);
+            }
+            rotateHtmlText();
+            
+            console.log('已显示HTML文字替代方案');
+        }
+
+        // 增强光源
+        const pointLight1 = new THREE.PointLight(0xff3399, 2.0, 150);
+        pointLight1.position.set(0, 25, 20);
+        scene.add(pointLight1);
+        
+        const pointLight2 = new THREE.PointLight(0xff69b4, 1.5, 100);
+        pointLight2.position.set(15, 20, -10);
+        scene.add(pointLight2);
+        
+        const ambientLight = new THREE.AmbientLight(0x555555);
+        scene.add(ambientLight);
+
+        // 相机位置
+        camera.position.set(0, 12, 60);
+        camera.lookAt(0, 15, 0);
+
+        // 全局旋转控制
+        let globalRotation = 0;
+        const rotationSpeed = 0.003; // 统一旋转速度
+
+        // 动画循环
+        function animate() {
+            requestAnimationFrame(animate);
+            const posArray = particles.attributes.position.array;
+            globalRotation += 0.03;
+
+            // 粒子状态更新
+            for (let i = 0; i < totalParticleCount; i++) {
+                const idx = i * 3;
+                const params = vortexParams[i];
+                
+                if (particleStates[i] === 0) {
+                    let currentAngle = Math.atan2(posArray[idx], posArray[idx + 2]) + params.angleSpeed;
+                    params.radius = Math.max(8, Math.min(12, params.radius + params.drift));
+                    posArray[idx + 1] += params.heightSpeed;
+                    posArray[idx + 1] = Math.max(-23, Math.min(-17, posArray[idx + 1]));
+                    
+                    posArray[idx] = Math.cos(currentAngle) * params.radius;
+                    posArray[idx + 2] = Math.sin(currentAngle) * params.radius;
+                    
+                    const riseChance = Math.random() < (0.015 + Math.sin(globalRotation * 0.2) * 0.005);
+                    if (riseChance || posArray[idx + 1] > -18) {
+                        particleStates[i] = 1;
+                    }
+                } else if (particleStates[i] === 1) {
+                    const dx = targetPositions[idx] - posArray[idx];
+                    const dy = targetPositions[idx + 1] - posArray[idx + 1];
+                    const dz = targetPositions[idx + 2] - posArray[idx + 2];
+                    const distance = Math.sqrt(dx*dx + dy*dy + dz*dz);
+
+                    const speed = distance > 2 ? 0.05 : (distance > 0.5 ? 0.03 : 0.015);
+                    posArray[idx] += dx * speed;
+                    posArray[idx + 1] += dy * speed;
+                    posArray[idx + 2] += dz * speed;
+
+                    if (distance < 0.15) {
+                        posArray[idx] = targetPositions[idx];
+                        posArray[idx + 1] = targetPositions[idx + 1];
+                        posArray[idx + 2] = targetPositions[idx + 2];
+                        particleStates[i] = 2;
+                    }
+                } else if (particleStates[i] === 2) {
+                    if (Math.random() < 0.0015) {
+                        const radius = 8 + Math.random() * 4;
+                        const angle = Math.random() * Math.PI * 2;
+                        posArray[idx] = Math.cos(angle) * radius;
+                        posArray[idx + 1] = -20 + Math.random() * 3;
+                        posArray[idx + 2] = Math.sin(angle) * radius;
+                        particleStates[i] = 0;
+                    }
+                    posArray[idx] += Math.sin(globalRotation * 0.08) * 0.006;
+                    posArray[idx + 2] += Math.cos(globalRotation * 0.08) * 0.006;
+                }
+            }
+
+            particles.attributes.position.needsUpdate = true;
+            
+            // 第一步：先让心形旋转，累计帧数
+            particleSystem.rotation.y += rotationSpeed;
+            
+            // 第二步：判断是否完成初始渲染
+            if (!heartInitialized) {
+                initFrameCount++;
+                // 等待60帧（约1秒）后标记心形初始化完成
+                if (initFrameCount >= INIT_FRAME_THRESHOLD) {
+                    heartInitialized = true;
+                    // 同步文字初始角度
+                    if (textMesh) {
+                        textMesh.rotation.y = particleSystem.rotation.y;
+                    }
+                    console.log('心形初始化完成，文字开始同步旋转');
+                }
+            } else {
+                // 第三步：只有心形初始化完成后，文字才开始旋转
+                if (textMesh) {
+                    textMesh.rotation.y += rotationSpeed;
+                }
+            }
+            
+            renderer.render(scene, camera);
+        }
+
+        // 启动动画
+        animate();
+
+        // 窗口自适应
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
