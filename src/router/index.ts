@@ -21,6 +21,7 @@ import TextCompare from '../views/TextCompare.vue'
 import TextCase from '../views/TextCase.vue'
 import TextEncode from '../views/TextEncode.vue'
 import MySelf from '../views/myself/Tools.vue'
+import MySelfFood from '../views/myself/Food.vue'
 import Maybe from '../views/maybe/Tools.vue'
 
 const routes: RouteRecordRaw[] = [
@@ -49,6 +50,7 @@ const routes: RouteRecordRaw[] = [
   { path: '/ai-tools', component: AITools, name: "AITools" },
   { path: '/ai-tools2', component: AITools2, name: "AITools2" },
   { path: '/myself-tools', component: MySelf, name: "MySelf" },
+  { path: '/myself-food', component: MySelfFood, name: "MySelfFood" },
   { path: '/maybe-tools', component: Maybe, name: "Maybe" },
 ]
 

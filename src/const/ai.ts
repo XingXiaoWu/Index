@@ -35,9 +35,9 @@ const AITools = {
         },
         {
             icon: "",
-            title: "zenscaleai",
-            link: "https://gy.zenscaleai.com/",
-            text: "https://linux.do/t/topic/1030723\n古希腊掌管哈基米的神\n签到"
+            title: "小辣椒",
+            link: "https://yyds.215.im/",
+            text: "确实辣"
         },
 
         {
@@ -48,39 +48,39 @@ const AITools = {
         },
         {
             icon: "",
-            title: "FreeKEY",
-            link: "https://api.freekey.site/",
-            text: "https://linux.do/t/topic/960621\nFreeKEY，爱您"
+            title: "AnAnAPI",
+            link: "https://www.ananapi.com/",
+            text: "https://linux.do/t/topic/1828940\nAnAnAPI，爱您"
         },
         {
             icon: "",
-            title: "runAnytime",
-            link: "https://veloera.wenwen12345.top/",
-            text: "https://linux.do/raw/747213\n随时跑路？大哥你是最持久的了！\n签到"
+            title: "Token Atlas",
+            link: "https://gptfreetoken.pony.indevs.in",
+            text: "https://linux.do/t/topic/1755909\n只领取token"
         },
         {
             icon: "",
-            title: "fanyi",
-            link: "https://fanyi.963312.xyz/",
-            text: "https://linux.do/t/topic/1012188\n古希腊掌管翻译的神"
+            title: "520china",
+            link: "https://aidrouter.qzz.io/",
+            text: "https://linux.do/t/topic/1371565/69\n520china"
         },
         {
             icon: "",
-            title: "963312",
-            link: "https://fanyi.963312.xyz/",
-            text: "和👈同宗同源了属于是"
+            title: "97",
+            link: "https://free.9977.me/",
+            text: "一天20刀"
         },
         {
             icon: "",
-            title: "红石一级",
-            link: "https://api.hongshi.ggff.net",
-            text: "https://linux.do/t/topic/1209940\n为什么高中生们这么强"
+            title: "luciferai",
+            link: "https://free.luciferai.cc/",
+            text: ""
         },
         {
             icon: "",
-            title: "红石二级",
-            link: "https://hongshi1024-l-api.hf.space",
-            text: "https://linux.do/t/topic/1209940\n为什么高中生们这么强"
+            title: "冰！",
+            link: "https://ice.v.ua/",
+            text: "竟然是冰！重置200"
         },
         {
             icon: "",
@@ -101,12 +101,12 @@ const AITools = {
             text: "和阿焕有友联了\n签到"
         },
 
-        // {
-        //     icon: "",
-        //     title: "KYX API Refueling Station",
-        //     link: "https://quota.kyx03.de/#slot",
-        //     text: "KYX API Refueling Station"
-        // },
+        {
+            icon: "",
+            title: "Pond hub",
+            link: "https://code.claudex.us.ci/",
+            text: "PondPondPond"
+        },
         // {
         //     icon: "",
         //     title: "23公益站",
@@ -170,30 +170,30 @@ const AITools = {
             text: "https://linux.do/t/topic/1084752\n欧阳淇淇\n抽奖"
         },
 
-        {
-            icon: "",
-            title: "FovtAPI",
-            link: "https://api.voct.top/login",
-            text: "一只小刺猬"
-        },
-        {
-            icon: "",
-            title: "曼波",
-            link: "https://ai.dik3.cn/console/token",
-            text: "https://linux.do/t/topic/1277194\n曼波"
-        },
+        // {
+        //     icon: "",
+        //     title: "FovtAPI",
+        //     link: "https://api.voct.top/login",
+        //     text: "一只小刺猬"
+        // },
+        // {
+        //     icon: "",
+        //     title: "曼波",
+        //     link: "https://ai.dik3.cn/console/token",
+        //     text: "https://linux.do/t/topic/1277194\n曼波"
+        // },
         {
             icon: "",
             title: "Agent Router",
             link: "https://agentrouter.org/",
             text: "是Neo吗？"
         },
-        {
-            icon: "",
-            title: "linjinpeng的API",
-            link: "https://linjinpeng-veloera.hf.space/",
-            text: "https://linux.do/t/topic/932914\n我觉得最完美的余额补充方式!"
-        },
+        // {
+        //     icon: "",
+        //     title: "linjinpeng的API",
+        //     link: "https://linjinpeng-veloera.hf.space/",
+        //     text: "https://linux.do/t/topic/932914\n我觉得最完美的余额补充方式!"
+        // },
         {
             icon: "",
             title: "SoraApi",
@@ -206,12 +206,12 @@ const AITools = {
             link: "https://529961.com",
             text: "https://linux.do/t/topic/1289560\n坦白的说，我不爱996\n抽奖"
         },
-        {
-            icon: "",
-            title: "B4U",
-            link: "https://b4u.qzz.io",
-            text: "B4U"
-        },
+        // {
+        //     icon: "",
+        //     title: "B4U",
+        //     link: "https://b4u.qzz.io",
+        //     text: "B4U"
+        // },
         {
             icon: "",
             title: "fengyeai",
@@ -220,12 +220,12 @@ const AITools = {
         }
     ],
     supplement: [
-        {
-            icon: "",
-            title: "colin1112的补充",
-            link: "https://cjapi.colin1112.me/",
-            text: "colin1112的补充"
-        },
+        // {
+        //     icon: "",
+        //     title: "colin1112的补充",
+        //     link: "https://cjapi.colin1112.me/",
+        //     text: "colin1112的补充"
+        // },
         {
             icon: "",
             title: "浮生十梦",
@@ -238,28 +238,28 @@ const AITools = {
             link: "https://qd.x666.me/",
             text: "薄荷公益站签到"
         },
-        {
-            icon: "",
-            title: "B4U",
-            link: "https://tw.b4u.qzz.io/dashboard",
-            text: "B4U大转盘"
-        },
+        // {
+        //     icon: "",
+        //     title: "B4U",
+        //     link: "https://tw.b4u.qzz.io/dashboard",
+        //     text: "B4U大转盘"
+        // },
         {
             icon: "",
             title: "修仙宝阁",
             link: "https://lucky.5202030.xyz/",
             text: "修仙宝阁"
         },
-        {
-            icon: "",
-            title: "莹のapi 加油站",
-            link: "https://quota.wpgzs.top/#slot",
-            text: "莹のapi 加油站"
-        },
+        // {
+        //     icon: "",
+        //     title: "莹のapi 加油站",
+        //     link: "https://quota.wpgzs.top/#slot",
+        //     text: "莹のapi 加油站"
+        // },
         {
             icon: "",
             title: "黑与白福利站NEXT",
-            link: "https://next-cdk.hybgzs.com",
+            link: "https://cdk.hybgzs.com",
             text: "黑与白福利站NEXT"
         },
         {
