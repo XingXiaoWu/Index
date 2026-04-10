@@ -25,6 +25,7 @@ interface Props {
 const { productList = [] } = defineProps<Props>()
 
 const goToUrl = (url: string) => {
+    // TODO:判断是不是http开头，不是则弹窗展示
     window.open(url)
 }
 </script>

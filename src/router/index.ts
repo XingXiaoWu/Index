@@ -23,6 +23,7 @@ import TextEncode from '../views/TextEncode.vue'
 import MySelf from '../views/myself/Tools.vue'
 import MySelfFood from '../views/myself/Food.vue'
 import Maybe from '../views/maybe/Tools.vue'
+import Windows from '../views/windows/Tools.vue'
 
 const routes: RouteRecordRaw[] = [
   { path: '/', component: Index, name: "index" },
@@ -52,6 +53,8 @@ const routes: RouteRecordRaw[] = [
   { path: '/myself-tools', component: MySelf, name: "MySelf" },
   { path: '/myself-food', component: MySelfFood, name: "MySelfFood" },
   { path: '/maybe-tools', component: Maybe, name: "Maybe" },
+  // windows密钥
+  { path: '/windows', component: Windows, name: "Windows" }
 ]
 
 const router = createRouter({
