@@ -4,6 +4,11 @@
             稀奇古怪的小工具
         </h2>
         <GridComponent :productList="maybeTools.proxy" />
+
+        <h2 class="flex-self-start">
+            JB激活
+        </h2>
+        <GridComponent :productList="maybeTools.jetbra" />
     </div>
 </template>
 <script lang="ts" setup>

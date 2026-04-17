@@ -84,6 +84,12 @@ const AITools = {
         },
         {
             icon: "",
+            title: "bwen",
+            link: "https://api.bwen.net/",
+            text: "竟然是bwen!"
+        },
+        {
+            icon: "",
             title: "dev88",
             link: "https://api.dev88.tech/",
             text: "https://linux.do/t/topic/1101573\n每天自動檢查剩餘額度 餘額低於$30會補充$10直到签到出现"
