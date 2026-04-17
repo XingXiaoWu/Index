@@ -1,86 +1,159 @@
 import { readonly, shallowRef } from 'vue'
 
-import type { PortalCollection, PortalConfig, PortalGroup } from '@/types/portal'
+import { AITools, develop, hackTools, homeData, maybeTools, myselfTools } from '@/const'
+import type { PortalCollection, PortalConfig, PortalGroup, PortalLinkItem } from '@/types/portal'
 
-const configRef = shallowRef<PortalConfig | null>(null)
-const loadingRef = shallowRef(false)
-const errorRef = shallowRef<string | null>(null)
-
-let pendingRequest: Promise<PortalConfig> | null = null
-
-function normalizeGroups(groups: readonly PortalGroup[] | undefined): PortalGroup[] {
-  return Array.isArray(groups)
-    ? groups.map((group) => ({
-      ...group,
-      items: Array.isArray(group.items) ? group.items : [],
-    }))
-    : []
+interface LegacyLinkItem {
+  title: string
+  link: string
+  text: string
+  icon?: string
 }
 
-function normalizeCollections(collections: readonly PortalCollection[] | undefined): PortalCollection[] {
-  return Array.isArray(collections)
-    ? collections.map((collection) => ({
-      ...collection,
-      groups: normalizeGroups(collection.groups),
-    }))
-    : []
+function normalizeLink(link: string): string {
+  return link.startsWith('/#/') ? link.slice(2) : link
 }
 
-function normalizeConfig(config: PortalConfig): PortalConfig {
+function normalizeItems(items: readonly LegacyLinkItem[]): PortalLinkItem[] {
+  return items.map(item => ({
+    title: item.title,
+    link: normalizeLink(item.link),
+    text: item.text,
+  }))
+}
+
+function createGroup(id: string, title: string, items: readonly LegacyLinkItem[], description = ''): PortalGroup {
   return {
-    ...config,
-    hero: {
-      ...config.hero,
-      chips: Array.isArray(config.hero?.chips) ? config.hero.chips : [],
-    },
-    quickAccess: Array.isArray(config.quickAccess) ? config.quickAccess : [],
-    collections: normalizeCollections(config.collections),
+    id,
+    title,
+    description,
+    items: normalizeItems(items),
   }
 }
 
-export async function loadPortalConfig(force = false): Promise<PortalConfig> {
-  if (configRef.value && !force)
-    return configRef.value
+function buildCollections(): PortalCollection[] {
+  return [
+    {
+      id: 'myself-tools',
+      route: '/myself-tools',
+      navLabel: '自制工具',
+      eyebrow: 'Build',
+      title: '阿星的自制工具',
+      summary: '由 src/const/myself.ts 聚合',
+      accent: 'signal',
+      groups: [
+        createGroup('proxy', '自己做的小工具', myselfTools.proxy),
+      ],
+    },
+    {
+      id: 'maybe-tools',
+      route: '/maybe-tools',
+      navLabel: '稀奇古怪',
+      eyebrow: 'Maybe',
+      title: '阿星收集的稀奇古怪',
+      summary: '由 src/const/maybe.ts 聚合',
+      accent: 'steel',
+      groups: [
+        createGroup('proxy', '稀奇古怪的小工具', maybeTools.proxy),
+        createGroup('jetbra', 'JB激活', maybeTools.jetbra),
+      ],
+    },
+    {
+      id: 'hack-tools',
+      route: '/hack-tools',
+      navLabel: '安全工具',
+      eyebrow: 'Hack',
+      title: '阿星的安全工具',
+      summary: '由 src/const/hack.ts 聚合',
+      accent: 'danger',
+      groups: [
+        createGroup('proxy', '代理工具', hackTools.proxy),
+      ],
+    },
+    {
+      id: 'develop-tools',
+      route: '/develop-tools',
+      navLabel: '开发支援',
+      eyebrow: 'Dev',
+      title: '阿星的开发工具',
+      summary: '由 src/const/develop.ts 聚合',
+      accent: 'sky',
+      groups: [
+        createGroup('docker-origin', 'Docker工具', develop.dockerOrigin),
+        createGroup('picture-bed', '图床', develop.pictureBed),
+      ],
+    },
+    {
+      id: 'ai-tools',
+      route: '/ai-tools',
+      navLabel: 'AI 入口',
+      eyebrow: 'AI',
+      title: '阿星发现的AI工具',
+      summary: '由 src/const/ai.ts 聚合',
+      accent: 'lime',
+      groups: [
+        createGroup('public-welfare', '公益站', AITools.publicelfare),
+        createGroup('supplement', '补充站', AITools.supplement),
+      ],
+    },
+    {
+      id: 'ai-tools2',
+      route: '/ai-tools2',
+      navLabel: 'AI 资料',
+      eyebrow: 'Archive',
+      title: 'AI资料库',
+      summary: '由 src/const/ai.ts 聚合',
+      accent: 'oxide',
+      groups: [
+        createGroup('public-data', '资料库', AITools.publicData),
+      ],
+    },
+  ]
+}
 
-  if (pendingRequest && !force)
-    return pendingRequest
+function buildPortalConfig(): PortalConfig {
+  return {
+    site: {
+      name: 'AXING INDEX',
+      owner: '阿星',
+      eyebrow: 'Expert Mode',
+      description: '个人工具、资料入口与实验页面的聚合站。',
+      status: '持续更新',
+      configPath: 'src/const/*',
+    },
+    hero: {
+      title: 'AXING INDEX',
+      summary: '',
+      announcement: '',
+      chips: [
+        'Const Source',
+        'Tool Aggregation',
+        'Hard-Edge UI',
+        'Lightweight Vue',
+      ],
+    },
+    quickAccess: normalizeItems(homeData),
+    collections: buildCollections(),
+  }
+}
 
-  loadingRef.value = true
+const configRef = shallowRef<PortalConfig>(buildPortalConfig())
+const loadingRef = shallowRef(false)
+const errorRef = shallowRef<string | null>(null)
+
+export async function loadPortalConfig(): Promise<PortalConfig> {
+  const config = buildPortalConfig()
+  configRef.value = config
   errorRef.value = null
-
-  pendingRequest = fetch(`${import.meta.env.BASE_URL}site.config.json`, {
-    cache: force ? 'no-store' : 'default',
-  })
-    .then(async (response) => {
-      if (!response.ok)
-        throw new Error(`配置加载失败: HTTP ${response.status}`)
-
-      const payload = await response.json() as PortalConfig
-      const normalized = normalizeConfig(payload)
-      configRef.value = normalized
-      return normalized
-    })
-    .catch((error: unknown) => {
-      const message = error instanceof Error ? error.message : '配置加载失败'
-      errorRef.value = message
-      throw error
-    })
-    .finally(() => {
-      loadingRef.value = false
-      pendingRequest = null
-    })
-
-  return pendingRequest
+  loadingRef.value = false
+  return config
 }
 
 export function usePortalConfig() {
-  if (!configRef.value && !loadingRef.value)
-    void loadPortalConfig()
-
   return {
     config: readonly(configRef),
     loading: readonly(loadingRef),
     error: readonly(errorRef),
-    reload: () => loadPortalConfig(true),
+    reload: () => loadPortalConfig(),
   }
 }

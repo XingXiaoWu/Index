@@ -82,8 +82,8 @@ const handleReload = () => {
   <div class="index-shell">
     <section v-if="loading && !config" class="state-panel">
       <p class="eyebrow">Loadout</p>
-      <h1>正在装载首页配置</h1>
-      <p>读取 `public/site.config.json`，准备生成聚合页。</p>
+      <h1>正在装载首页聚合</h1>
+      <p>正在从 `src/const` 读取聚合数据。</p>
     </section>
 
     <section v-else-if="error && !config" class="state-panel state-panel--error">
@@ -126,7 +126,7 @@ const handleReload = () => {
               <div class="profile-card__meta">
                 <span>Owner / {{ config.site.owner }}</span>
                 <span>Status / {{ config.site.status }}</span>
-                <span>Config / JSON</span>
+                <span>Source / CONST</span>
               </div>
             </div>
           </div>

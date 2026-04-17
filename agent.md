@@ -4,13 +4,13 @@
 
 这是一个基于 `Vue 3 + Vite + TypeScript` 的个人工具与资源聚合站。
 
-当前主页和分类页已经改造成 **JSON 配置驱动**：
+当前主页和分类页已经改造成 **`src/const` 聚合驱动**：
 
-- 首页入口来自 `public/site.config.json`
-- 分类页也复用同一份配置
-- 视觉方向偏硬朗、留白明显、少解释性文案
+- 首页入口来自 `src/const/home.ts`
+- 各类工具聚合来自 `src/const/*.ts`
+- 门户页只是消费这些常量并做展示，不再从 `public` 里的 JSON 拉配置
 
-如果你要继续扩展站点，优先沿着这条路线做，不要再把首页写回“静态说明页”。
+如果你要继续扩展站点，优先沿着这条路线做，不要再把门户数据源拆到新的外部配置文件里。
 
 ## 技术栈
 
@@ -59,11 +59,11 @@ pnpm build-only
 - `src/App.vue`：全局布局容器
 - `src/router/index.ts`：路由总表
 
-### 配置驱动门户
+### 门户聚合层
 
-- `public/site.config.json`：首页、快捷入口、分类聚合、集合分组的配置源
-- `src/types/portal.ts`：门户配置类型定义
-- `src/composables/usePortalConfig.ts`：配置加载与缓存
+- `src/const/*.ts`：首页和各类工具的原始聚合数据
+- `src/types/portal.ts`：门户展示类型
+- `src/composables/usePortalConfig.ts`：从 `src/const` 构建门户聚合
 - `src/components/GridComponent.vue`：统一卡片网格组件
 - `src/views/portal/Index.vue`：门户首页
 - `src/views/portal/CollectionView.vue`：通用分类页
@@ -75,7 +75,8 @@ pnpm build-only
 - `src/views/text/`：文本工具
 - `src/views/myself/`：个人工具与页面
 - `src/views/network/`：网络相关页面
-- `src/views/ai/`、`src/views/hack/`、`src/views/develop/`、`src/views/maybe/`：旧分组页面，目前主要作为历史遗留内容存在
+- `src/views/windows/`：Windows 相关页面
+- `src/views/ai/`、`src/views/hack/`、`src/views/develop/`、`src/views/maybe/`：经典版分类页
 
 ## 路由规则
 
@@ -88,26 +89,29 @@ pnpm build-only
 - 首页使用 `@/views/portal/Index.vue`
 - `hack-tools`、`develop-tools`、`ai-tools`、`ai-tools2`、`myself-tools`、`maybe-tools`
   统一走 `CollectionView`
-- 这些分类页通过 `route.meta.collectionId` 从 `site.config.json` 找到对应配置
+- 这些分类页通过 `route.meta.collectionId` 从 `src/const` 聚合出对应展示数据
+- 同时保留一组 `*-classic` 路由，用来访问旧版分类页
 
-如果新增一个新的配置驱动分类：
+如果新增一个新的聚合分类：
 
-1. 在 `public/site.config.json` 里新增 `collection`
-2. 在 `src/router/index.ts` 新增对应路由
-3. 给该路由设置正确的 `meta.collectionId`
+1. 先在 `src/const` 中补对应数据
+2. 在 `src/composables/usePortalConfig.ts` 中补充映射
+3. 在 `src/router/index.ts` 中新增路由并设置 `meta.collectionId`
 
 ## 开发约定
 
-### 1. 首页与分类页优先配置驱动
-
-不要把首页内容重新散落回：
-
-- `src/const/*.ts`
-- 多个独立静态分类页面
+### 1. 首页与分类页优先从 `src/const` 聚合
 
 对于首页、主入口、聚合分类，优先编辑：
 
-- `public/site.config.json`
+- `src/const/home.ts`
+- `src/const/hack.ts`
+- `src/const/develop.ts`
+- `src/const/ai.ts`
+- `src/const/myself.ts`
+- `src/const/maybe.ts`
+
+不要再新增一份平行的门户 JSON 配置源。
 
 ### 2. 文案克制
 
@@ -168,16 +172,18 @@ pnpm build-only
 
 优先看：
 
-- `public/site.config.json`
+- `src/const/home.ts`
 - `src/views/portal/Index.vue`
+- `src/composables/usePortalConfig.ts`
 - `src/components/GridComponent.vue`
 
 ### 改分类聚合
 
 优先看：
 
-- `public/site.config.json`
+- `src/const/*.ts`
 - `src/views/portal/CollectionView.vue`
+- `src/composables/usePortalConfig.ts`
 - `src/router/index.ts`
 
 ### 改图片工具
@@ -207,10 +213,10 @@ pnpm type-check
 pnpm build-only
 ```
 
-如果只是改配置文件，也建议至少跑一次构建确认 JSON 读取链路没问题。
+如果只是改 `src/const` 的聚合数据，也建议至少跑一次构建确认映射链路没问题。
 
 ## 备注
 
 - 根目录目前有一些临时文件和历史文件，不要默认清理，除非用户明确要求
-- `src/const/*.ts` 仍然存在，但门户主流程已经不再依赖它们
+- 门户主流程当前直接依赖 `src/const/*.ts`
 - `components.d.ts`、`auto-imports.d.ts` 可能会因组件扫描自动变化，属于正常现象

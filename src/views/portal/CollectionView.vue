@@ -8,6 +8,15 @@ const { config, loading, error, reload } = usePortalConfig()
 
 const collectionId = computed(() => String(route.meta.collectionId ?? ''))
 
+const classicRouteMap: Record<string, string> = {
+  'hack-tools': '/hack-tools-classic',
+  'develop-tools': '/develop-tools-classic',
+  'ai-tools': '/ai-tools-classic',
+  'ai-tools2': '/ai-tools2-classic',
+  'myself-tools': '/myself-tools-classic',
+  'maybe-tools': '/maybe-tools-classic',
+}
+
 const currentCollection = computed(() =>
   config.value?.collections.find(collection => collection.id === collectionId.value) ?? null,
 )
@@ -15,6 +24,8 @@ const currentCollection = computed(() =>
 const totalItems = computed(() =>
   currentCollection.value?.groups.reduce((sum, group) => sum + group.items.length, 0) ?? 0,
 )
+
+const classicRoute = computed(() => classicRouteMap[collectionId.value] ?? '')
 
 const handleReload = () => {
   void reload()
@@ -35,8 +46,8 @@ const scrollToGroup = (groupId: string) => {
   >
     <section v-if="loading && !currentCollection" class="state-card">
       <p class="eyebrow">Loadout</p>
-      <h1>正在装载分类配置</h1>
-      <p>分类页将直接复用 `public/site.config.json` 的分组数据。</p>
+      <h1>正在装载分类聚合</h1>
+      <p>分类页将直接复用 `src/const` 的分组数据。</p>
     </section>
 
     <section v-else-if="error && !currentCollection" class="state-card state-card--error">
@@ -57,6 +68,13 @@ const scrollToGroup = (groupId: string) => {
           <div class="hero-card__actions">
             <RouterLink class="ghost-button ghost-button--solid" to="/">
               返回首页
+            </RouterLink>
+            <RouterLink
+              v-if="classicRoute"
+              class="ghost-button"
+              :to="classicRoute"
+            >
+              经典页
             </RouterLink>
             <RouterLink
               v-for="entry in config?.collections ?? []"
@@ -80,8 +98,8 @@ const scrollToGroup = (groupId: string) => {
             <strong>{{ totalItems }}</strong>
           </article>
           <article class="hero-stat">
-            <span>Config</span>
-            <strong>JSON</strong>
+            <span>Source</span>
+            <strong>CONST</strong>
           </article>
         </div>
       </section>
