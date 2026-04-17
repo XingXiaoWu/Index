@@ -1,28 +1,23 @@
 import { createRouter, createWebHashHistory, type RouteRecordRaw } from 'vue-router'
-import Index from '../views/Index.vue'
-import HackTools from '../views/hack/Tools.vue'
-import DevelopTools from '../views/develop/Tools.vue'
-import AITools from '../views/ai/Tools.vue'
-import AITools2 from '../views/ai/Tools2.vue'
-import KeyValGenerator from '../views/KeyValGenerator.vue'
-import ThanksLiVue from '../views/ThanksLi.vue'
-import Fxkp from '../views/Fxkp.vue'
-import NetWorkTop from '../views/NetWorkTop.vue'
-import Pdf2Png from '../views/Pdf2Png.vue'
-import Ciphertext from '../views/Ciphertext.vue'
-import ImageTools from '../views/ImageTools.vue'
-import ImageBase64 from '../views/ImageBase64.vue'
-// import ImageToIco from '../views/ImageToIco.vue'
-// import ImagePdf from '../views/ImagePdf.vue'
-// import ImageResize from '../views/ImageResize.vue'
-import ImageCompress from '../views/ImageCompress.vue'
-import TextTools from '../views/TextTools.vue'
-import TextCompare from '../views/TextCompare.vue'
-import TextCase from '../views/TextCase.vue'
-import TextEncode from '../views/TextEncode.vue'
-import MySelf from '../views/myself/Tools.vue'
-import MySelfFood from '../views/myself/Food.vue'
-import Maybe from '../views/maybe/Tools.vue'
+import Index from '@/views/portal/Index.vue'
+import CollectionView from '@/views/portal/CollectionView.vue'
+import KeyValGenerator from '@/views/myself/KeyValGenerator.vue'
+import ThanksLiVue from '@/views/myself/ThanksLi.vue'
+import Fxkp from '@/views/myself/Fxkp.vue'
+import NetWorkTop from '@/views/network/Top.vue'
+import Pdf2Png from '@/views/myself/Pdf2Png.vue'
+import Ciphertext from '@/views/myself/Ciphertext.vue'
+import ImageTools from '@/views/image/Tools.vue'
+import ImageBase64 from '@/views/image/Base64.vue'
+// import ImageToIco from '@/views/image/Ico.vue'
+// import ImagePdf from '@/views/image/Pdf.vue'
+// import ImageResize from '@/views/image/Resize.vue'
+import ImageCompress from '@/views/image/Compress.vue'
+import TextTools from '@/views/text/Tools.vue'
+import TextCompare from '@/views/text/Compare.vue'
+import TextCase from '@/views/text/Case.vue'
+import TextEncode from '@/views/text/Encode.vue'
+import MySelfFood from '@/views/myself/Food.vue'
 
 const routes: RouteRecordRaw[] = [
   { path: '/', component: Index, name: "index" },
@@ -45,13 +40,13 @@ const routes: RouteRecordRaw[] = [
   { path: '/text-case', component: TextCase, name: "textCase" },
   { path: '/text-encode', component: TextEncode, name: "textEncode" },
   // hack工具
-  { path: '/hack-tools', component: HackTools, name: "hackTools" },
-  { path: '/develop-tools', component: DevelopTools, name: "developTools" },
-  { path: '/ai-tools', component: AITools, name: "AITools" },
-  { path: '/ai-tools2', component: AITools2, name: "AITools2" },
-  { path: '/myself-tools', component: MySelf, name: "MySelf" },
+  { path: '/hack-tools', component: CollectionView, name: "hackTools", meta: { collectionId: 'hack-tools' } },
+  { path: '/develop-tools', component: CollectionView, name: "developTools", meta: { collectionId: 'develop-tools' } },
+  { path: '/ai-tools', component: CollectionView, name: "AITools", meta: { collectionId: 'ai-tools' } },
+  { path: '/ai-tools2', component: CollectionView, name: "AITools2", meta: { collectionId: 'ai-tools2' } },
+  { path: '/myself-tools', component: CollectionView, name: "MySelf", meta: { collectionId: 'myself-tools' } },
   { path: '/myself-food', component: MySelfFood, name: "MySelfFood" },
-  { path: '/maybe-tools', component: Maybe, name: "Maybe" },
+  { path: '/maybe-tools', component: CollectionView, name: "Maybe", meta: { collectionId: 'maybe-tools' } },
 ]
 
 const router = createRouter({

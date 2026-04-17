@@ -3,7 +3,7 @@
     <n-message-provider>
       <n-layout has-sider>
         <n-layout>
-          <n-layout-content content-style="padding: 24px;">
+          <n-layout-content content-style="padding: clamp(12px, 3vw, 24px);">
             <router-view> </router-view>
           </n-layout-content>
         </n-layout>

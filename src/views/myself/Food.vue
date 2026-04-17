@@ -659,6 +659,7 @@ function clamp(value: number, min: number, max: number) {
   width: 100%;
   max-width: 1100px;
   margin: 0 auto;
+  padding-bottom: calc(110px + env(safe-area-inset-bottom));
   color: var(--text);
   font-family: 'Avenir Next', 'Trebuchet MS', 'PingFang SC', 'Microsoft YaHei', sans-serif;
 }
@@ -677,7 +678,7 @@ function clamp(value: number, min: number, max: number) {
 }
 
 .hero {
-  padding: 18px;
+  padding: 14px;
   background: var(--bg);
 }
 
@@ -735,7 +736,7 @@ function clamp(value: number, min: number, max: number) {
 .stats,
 .cart-metrics {
   margin-top: 18px;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .stat,
@@ -775,6 +776,11 @@ function clamp(value: number, min: number, max: number) {
   transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
 }
 
+.preset-card {
+  flex: 0 0 min(82vw, 280px);
+  scroll-snap-align: start;
+}
+
 .special-card em {
   color: var(--accent);
   font-style: normal;
@@ -794,6 +800,7 @@ function clamp(value: number, min: number, max: number) {
   gap: 10px;
   margin-top: 18px;
   overflow-x: auto;
+  scroll-snap-type: x proximity;
   scrollbar-width: none;
 }
 
@@ -807,11 +814,11 @@ function clamp(value: number, min: number, max: number) {
 }
 
 .workspace > .panel {
-  padding: 18px;
+  padding: 14px;
 }
 
 .controls {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: 1fr;
 }
 
 .controls label,
@@ -1023,10 +1030,12 @@ function clamp(value: number, min: number, max: number) {
 }
 
 .mobile-bar {
-  position: sticky;
-  bottom: 10px;
+  display: none;
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: calc(12px + env(safe-area-inset-bottom));
   z-index: 5;
-  margin-top: 18px;
   padding: 12px 14px;
   border-radius: 18px;
   background: rgba(255, 250, 242, 0.94);
@@ -1038,6 +1047,15 @@ function clamp(value: number, min: number, max: number) {
   .hero {
     grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
     padding: 24px;
+  }
+
+  .stats,
+  .cart-metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .controls {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .menu-grid {
@@ -1062,11 +1080,77 @@ function clamp(value: number, min: number, max: number) {
 }
 
 @media (max-width: 719px) {
-  .stats,
-  .cart-metrics,
-  .controls,
+  .food-page {
+    padding-bottom: calc(104px + env(safe-area-inset-bottom));
+  }
+
+  .panel {
+    border-radius: 22px;
+  }
+
+  .specials,
+  .workspace > .panel {
+    padding: 14px;
+  }
+
+  .stats .stat:first-child,
+  .cart-metrics .stat:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .section-head,
+  .dish-top,
+  .dish-bottom,
+  .cart-item,
+  .cart-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dish-bottom,
+  .cart-actions {
+    width: 100%;
+  }
+
+  .dish-bottom > div,
+  .cart-item > div,
+  .cart-actions > .stepper {
+    width: 100%;
+  }
+
+  .dish-bottom .compact,
+  .cart-actions .compact {
+    justify-content: space-between;
+  }
+
+  .ghost,
+  .secondary-btn,
+  .primary-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
   .cart-buttons {
     grid-template-columns: 1fr;
+  }
+
+  .controls input,
+  .note textarea,
+  .ghost,
+  .secondary-btn,
+  .primary-btn,
+  .chip {
+    font-size: 16px;
+  }
+
+  .mobile-bar {
+    display: flex;
+  }
+
+  .mobile-bar > div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
   }
 }
 </style>
