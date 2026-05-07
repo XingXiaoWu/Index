@@ -30,6 +30,19 @@ const develop = {
             link: 'https://linuxmirrors.cn/other/',
             text: '脚本换源'
         },
+        {
+            icon: '',
+            title: '穷鬼套餐',
+            link: 'https://free-for.dev/#/',
+            text: '嘿嘿，我是穷鬼\nhttps://github.com/ripienaar/free-for-dev'
+        },
+        {
+            icon: '',
+            title: 'Cloudflare-R2/SaaS已绑卡成品号',
+            link: 'https://ldc.ikun.x10.bz/',
+            text: '该买就买'
+        }
+
     ],
     pictureBed: [
         {
