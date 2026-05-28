@@ -21,18 +21,18 @@ const AITools = {
             text: "https://linux.do/t/topic/1175087\n优化线路 允许任意IP RPM稍低\n签到"
         },
 
-        {
-            icon: "",
-            title: "Mu.Li API Relive",
-            link: "https://demo.awa1.fun/",
-            text: "https://linux.do/t/topic/927953/177\n用完了找楼主要"
-        },
-        {
-            icon: "",
-            title: "colin1112",
-            link: "https://api.colin1112.me/",
-            text: "https://linux.do/t/topic/977702\n抽奖"
-        },
+        // {
+        //     icon: "",
+        //     title: "Mu.Li API Relive",
+        //     link: "https://demo.awa1.fun/",
+        //     text: "https://linux.do/t/topic/927953/177\n用完了找楼主要"
+        // },
+        // {
+        //     icon: "",
+        //     title: "colin1112",
+        //     link: "https://api.colin1112.me/",
+        //     text: "https://linux.do/t/topic/977702\n抽奖"
+        // },
         {
             icon: "",
             title: "小辣椒",
@@ -52,24 +52,24 @@ const AITools = {
             link: "https://www.ananapi.com/",
             text: "https://linux.do/t/topic/1828940\nAnAnAPI，爱您"
         },
-        {
-            icon: "",
-            title: "Token Atlas",
-            link: "https://gptfreetoken.pony.indevs.in",
-            text: "https://linux.do/t/topic/1755909\n只领取token"
-        },
-        {
-            icon: "",
-            title: "520china",
-            link: "https://aidrouter.qzz.io/",
-            text: "https://linux.do/t/topic/1371565/69\n520china"
-        },
-        {
-            icon: "",
-            title: "97",
-            link: "https://free.9977.me/",
-            text: "一天20刀"
-        },
+        // {
+        //     icon: "",
+        //     title: "Token Atlas",
+        //     link: "https://gptfreetoken.pony.indevs.in",
+        //     text: "https://linux.do/t/topic/1755909\n只领取token"
+        // },
+        // {
+        //     icon: "",
+        //     title: "520china",
+        //     link: "https://aidrouter.qzz.io/",
+        //     text: "https://linux.do/t/topic/1371565/69\n520china"
+        // },
+        // {
+        //     icon: "",
+        //     title: "97",
+        //     link: "https://free.9977.me/",
+        //     text: "一天20刀"
+        // },
         {
             icon: "",
             title: "luciferai",
@@ -79,7 +79,7 @@ const AITools = {
         {
             icon: "",
             title: "冰！",
-            link: "https://ice.v.ua/",
+            link: "https://icoe.pp.ua/",
             text: "竟然是冰！重置200"
         },
         {
@@ -107,12 +107,12 @@ const AITools = {
             text: "和阿焕有友联了\n签到"
         },
 
-        {
-            icon: "",
-            title: "Pond hub",
-            link: "https://code.claudex.us.ci/",
-            text: "PondPondPond"
-        },
+        // {
+        //     icon: "",
+        //     title: "Pond hub",
+        //     link: "https://code.claudex.us.ci/",
+        //     text: "PondPondPond"
+        // },
         // {
         //     icon: "",
         //     title: "23公益站",
@@ -139,18 +139,18 @@ const AITools = {
             link: "https://api.codeqaq.com/",
             text: "包子铺的Newapi"
         },
-        {
-            icon: "",
-            title: "KFC API",
-            link: "https://kfc-api.sxxe.net/login?expired=true",
-            text: "每周四开放"
-        },
-        {
-            icon: "",
-            title: "莹のAPI",
-            link: "https://api.wpgzs.top",
-            text: "KYX继承者\n抽奖"
-        },
+        // {
+        //     icon: "",
+        //     title: "KFC API",
+        //     link: "https://kfc-api.sxxe.net/login?expired=true",
+        //     text: "每周四开放"
+        // },
+        // {
+        //     icon: "",
+        //     title: "莹のAPI",
+        //     link: "https://api.wpgzs.top",
+        //     text: "KYX继承者\n抽奖"
+        // },
         {
             icon: "",
             title: "SWT-API",
